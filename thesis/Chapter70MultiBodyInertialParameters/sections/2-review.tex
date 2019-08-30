@@ -1,0 +1,326 @@
+In this chapter, we will use several concepts related to the change of base link that we introduced in Chapter~\ref{chap:multibody}.
+The notation used in the chapter is summarized in the next table.
+
+\[
+  \left[
+      \begin{tabular}{@{\quad}m{.05\textwidth}@{\quad}m{.83\textwidth}}
+        {\Huge \faInfoCircle} &
+          \raggedright%
+           \textbf{Notation used in Chapter~\ref{ch:inertialParametersMultiBody}} \par
+          \begin{tabular}{@{}p{0.24\textwidth}p{0.55\textwidth}@{}}
+              $\text{LinkIndex}(\cdot) : \linkSet \mapsto \{1, \cdots, \nLinks\}$ & Link serialization function. \\
+              $\pi_{L} \in \R^{10}$ & Vector of inertial parameters of link $L$.  \\
+              $\psi \in \R^{10 \nLinks}$ & Vector of all the inertial parameters of a multibody system. \\
+              $\alpha_B^g := \alpha_{A,B}^g$ & Sensor proper acceleration of body $B$. \\
+              $\omega_B := \ls^B\omega_{A,B}$ & Angular velocity of the link $B$ in the $B$ frame. \\
+              $s$ & Internal joint (shape) positions. \\
+              $\dot{s}$ & Internal joint (shape) velocities. \\
+              $\ddot{s}$ & Internal joint (shape) accelerations. \\
+              
+          \end{tabular}
+      \end{tabular}
+    \right]
+\]
+
+
+
+\section{Identification of floating base dynamics}
+Similarly to the rigid body case presented in Chapter~\ref{ch:inertialParameters}, the inertial parameters of the a multibody system can be reprented by an inertial parameters vector, defined as in the following. 
+
+\begin{definition}[Multibody Inertial Parameters Vector]
+Given a multibody system, its inertial parameters vector $\psi \in \R^{10 \nLinks}$ is defined as:
+\begin{equation}
+{\psi} = 
+\begin{bmatrix}
+\pi_{\linkSerialization(1)} \\
+\pi_{\linkSerialization(2)} \\
+\vdots \\
+\pi_{\linkSerialization({\nLinks})} 
+\end{bmatrix}
+\in \mathbb{R}^{10 \nLinks},
+\nonumber
+\end{equation}
+where $\pi_L \in \R^{10}$ is the vector of the inertial parameters 
+of link $L$, defined in \eqref{eq:inertialParametersVector}.
+\end{definition}
+
+Several dynamics-related quantities, starting from the lagrangian itself, can be written linearly w.r.t. to this vector. While in the past methods to use \emph{energy-based} \citep{gautier1988energy,gautier1997power} or \emph{center of pressure-based} \citep{baelemans2013,baelemans2013thesis} have been proposed, the most used method in the literature of the identification of humanoids inertial parameters is the floating base dynamics regressor \citep{jovic2015,ayusawa2013,ogawa2014,Mistry2009}, introduced in the next proposition. 
+
+\begin{proposition}[Floating Base Regressor \citep{ayusawa2013}]
+The right-hand side of \eqref{eq:eqsMotSensorProper} can be rearranged linearly with respect to a vector of inertial parameters $\psi$, i.e. : 
+\begin{eqnarray}
+\label{eq:regrDynamics}
+\Gamma(\alpha^g_B,\omega_{B},s,\dot{s},\ddot{s}) =
+\begin{bmatrix}
+\ls_{B}{Y}_{b} \\
+\ls_{B}{Y}_{s} 
+\end{bmatrix}
+\psi =
+\begin{bmatrix}
+0_{6 \times 1} \\
+\tau 
+\end{bmatrix}
++
+\sum_{L \in \linkSet} J_L^\top \rmf_l^{x}.
+\end{eqnarray}
+\end{proposition}
+
+The typical assumption in literature is that both joint torques and contact force measurements are available \citep{Mistry2009,ogawa2014}, and in that case all the lines of \eqref{eq:regrDynamics} can be used for identification. The alternative assumption is that only contact forces measurements are available \citep{ayusawa2013,jovic2015} and in that case only the first 6 rows of \eqref{eq:regrDynamics} are used for estimation, disregarding the \emph{shape dynamics}. 
+However both this hypothesis are not matched by the assumptions of this thesis explained in Chapter~\ref{chap:extForceAndJntTorqueEstimation}: in our case neither joint torques nor contact forces are available as measurements, and the estimates presented in  Chapter~\ref{chap:extForceAndJntTorqueEstimation} depend them-self on the inertial parameters of the assumed model, so they cannot be used for inertial parameters estimation. Assuming that the considered models is equipped with internal six-axis force-torque sensor, the solution is again to consider the submodels introduced in Subsection~\ref{subsec:modelDecomposition} separately. In particular, also the left-hand term of \eqref{eq:NEforEstimationSubModel} can be rewritten in function of $\psi$:
+
+\begin{equation}
+    \label{eq:NEforIdentificationSubModel}
+    Y_{\phi_{sm}} \psi =
+    \sum_{L \in \linkSet_{sm}}  \ls_B X^L \ls_L \phi_L = \sum_{L \in (\mathfrak{C} \cap \linkSet_{sm}) }  \ls_B X^L \ls_L \rmf^x_L +  \sum_{L \in \mathfrak{L}_{sm}} \sum_{D \in \beth_{sm}(L)}  \ls_B X^D \ls_D \rmf_{D,L} 
+\end{equation}
+
+In general there are two classes of unknowns in this equation: the inertial parameters $\psi$ and the external force-torque $\ls_L \rmf^x_L$. If at a given instant we know that no external force-torques (from a-priori information or from the distributed tactile system) are acting on the submodel $sm$, the equation can be rewritten as:
+\begin{equation}
+    \label{eq:NEforIdentificationSubModelNoExt}
+    Y_{\phi_{sm}} \psi =
+    \sum_{L \in \linkSet_{sm}}  \ls_B X^L \ls_L \phi_L = \sum_{L \in \mathfrak{L}_{sm}} \sum_{D \in \beth_{sm}(L)}  \ls_B X^D \ls_D \rmf_{D,L} 
+\end{equation}
+and this equation can be used directly for the identification of the inertial parameters $\psi$.
+
+The regressor obtained by combining the base regressors of of all submodels $\mathfrak{M} = {1,2, \dots, n+1}$ is defined as:
+\begin{equation}
+\label{eq:allSubModelsRegressors}
+Y_{\phi_{\mathfrak{M}}} \psi
+=
+\begin{bmatrix}
+Y_{\phi_{1}} \\
+Y_{\phi_{2}} \\
+\vdots       \\ 
+Y_{\phi_{n+1}} 
+\end{bmatrix}
+\psi 
+=
+\begin{bmatrix}
+\sum_{L \in (\mathfrak{C} \cap \linkSet_{1}) }  \ls_B X^L \ls_L \rmf^x_L \\
+\sum_{L \in (\mathfrak{C} \cap \linkSet_{2}) }  \ls_B X^L \ls_L \rmf^x_L \\
+\vdots \\
+\sum_{L \in (\mathfrak{C} \cap \linkSet_{n+1}) }  \ls_B X^L \ls_L \rmf^x_L
+\end{bmatrix}
++
+\begin{bmatrix}
+\sum_{L \in \mathfrak{L}_{1}} \sum_{D \in \beth_{1}(L)}  \ls_B X^D \ls_D \rmf_{D,L} \\
+\sum_{L \in \mathfrak{L}_{2}} \sum_{D \in \beth_{2}(L)}  \ls_B X^D \ls_D \rmf_{D,L} \\
+\vdots \\
+\sum_{L \in \mathfrak{L}_{n+1}} \sum_{D \in \beth_{n+1}(L)}  \ls_B X^D \ls_D \rmf_{D,L}
+\end{bmatrix}
+\end{equation}
+The actual part of $Y_{\phi_{\mathfrak{M}}}$ that can be used for estimation depends on the instantaneous set of links that are in contact with the environment $\mathfrak{C}$. However, assuming that for each submodel there exists data samples in which they are not in contact with the environment all parts of $Y_{\phi_{\mathfrak{M}}}$ can be used for identification, sooner or later.
+
+The regressor for joint torques can be written easily due to Theorem~\ref{thm:torqueEstimationIsLocal}. In particular \eqref{eq:localTorqueEstimation} can be written as:
+\begin{equation}
+\label{eq:localTorqueEstimationForIdentification}
+\tau_{E,F} = \left< \ls^F \mathrm{s}_{E,F} , \sum \phi_L + \ls^F \rmf_{G,H} \right> = Y_{\hat{\tau}_{E,F}} \psi + \left< \ls^F \mathrm{s}_{E,F} ,  \ls^F \rmf_{G,H} \right> .
+\end{equation}
+ 
+% \begin{eqnarray*}
+%    m_l & \quad & \mbox{mass of link $l$} \\
+%    m_l\mathbf{c}_l & \quad &  \mbox{first moment of mass of link $l$} \\ 
+%    {\mathbf{\overline{I}}_O}_l & \quad &  \mbox{3D rotational inertia matrix of link $l$}
+% \end{eqnarray*}
+% \emph{Remark:} in literature, the inertia matrix is often expressed w.r.t. the center of mass of the link. However, we express it w.r.t. a different reference
+%  frame - fixed to link $L$ but not located at the center of mass - because otherwise the dynamic 
+% equations would not be linear in the inertial parameters.
+
+\subsubsection{Identifiable subspaces}
+\label{sec:baseParam}
+
+The different parametric representation of the robot dynamics such as \eqref{eq:regrDynamics} or the submodel representation \eqref{eq:NEforIdentificationSubModel} can be always rearranged as $Y \phi = m$, where both $Y$ and $m$ can be computed given the available measurments. An 
+ estimation of $\phi$ can be obtained by considering repeated measurements $Y
+ ^1$, $\dots$, $Y^N$ and the associated values of the regression matrix $Y^1$, $
+ \dots$, $Y^N$, related as follows:
+ 
+\begin{equation}
+\label{eq:bigRegression}
+\begin{bmatrix} 
+\genericRegressor^1 
+\\
+\genericRegressor^2
+\\
+\dots
+\\
+\genericRegressor^N
+\\
+\end{bmatrix}
+\phi
+=
+\begin{bmatrix}
+m^1
+\\
+m^2
+\\
+\dots
+\\
+m^N
+\end{bmatrix}.
+\end{equation}
+The matrix that multiplies $\phi$ is rank deficient regardless of the number of measured samples $N$ \citep{handbookident}. 
+
+More specifically, the following vector subspaces of $\R^{10 \nLinks}$ can be defined.
+
+\begin{definition}[Non-Identifiable Subspace \citep{sheu91}]
+\label{def:nonIdentDef}
+Given a regressor $Y$, the \emph{inertial parameters non-identifiable subspace} $N_Y$ is defined  as:
+\begin{IEEEeqnarray}{rCl} 
+\label{eq:nonIdentDef}
+N_{Y} =  \{ \phi \in \mathbb{R}^{10 \nLinks}  :   Y(\omega_B,\alpha_B^g,s,\dot{s},\ddot{s}) \phi = \mathbf{0},  \IEEEnonumber
+\\
+\forall \hspace{0.2cm} \omega_B \in \R^3, \ \alpha_B^g \in \R^6, \  s,\dot{s},\ddot{s} \in \R^{\nDofs}  \}.
+\end{IEEEeqnarray}
+\end{definition}
+
+\begin{definition}[Identifiable Subspace \citep{sheu91}]
+\label{def:identDef}
+Given a regressor $Y$, the \emph{inertial parameters identifiable subspace} $I_Y$ is defined as the subspace orthogonal to $N_Y$, i.e.: 
+\begin{IEEEeqnarray}{rCl} 
+\label{eq:identDef}
+I_Y &=& N_Y^{\perp}
+\end{IEEEeqnarray}
+\end{definition}
+
+\noindent
+In general the space $N_{Y}$ is non-empty as a consequence of fact that the columns of $Y$ are linearly dependent  for any choice of the robot position, velocity and acceleration. Only certain linear combinations of the elements of $\phi$ influence the measurements 
+and these combinations can be obtained as:
+\begin{equation}
+\psi = B \baseParameters
+\end{equation}
+being $B$ a matrix whose columns are an orthonormal base of the identifiable subspace $I_Y$. 
+
+It is then possible to reformulate \eqref{eq:bigRegression} as:
+\begin{equation}
+\label{eq:bigTildeRegression}
+\begin{bmatrix} 
+\genericRegressor^1 B
+\\
+\genericRegressor^2 B
+\\
+\dots
+\\
+\genericRegressor^N B
+\\
+\end{bmatrix}
+\baseParameters 
+=
+\begin{bmatrix}
+Y^1
+\\
+Y^2
+\\
+\dots
+\\
+Y^N
+\end{bmatrix} \quad \rightarrow \quad \mathbf{G}_N \baseParameters = \mathbf{g}_N ,
+\end{equation}
+with obvious definition for the matrix  $\mathbf{G}_N$ and the vector $ \mathbf{g}_N$.
+Classically, equation \eqref{eq:bigTildeRegression} has been used for the estimation of the base
+parameters associated with a certain measurement $m$. This is suitable if the goal of the parametric identification was to improve the prediction of the measurement $m$ itself. In the case of the estimation algorithm presented in Chapter~\ref{chap:extForceAndJntTorqueEstimation}, however the measurement available for the inertial parameters identification (i.e. the sum of the measured force-torque acting on a submodel) are different from some measurements we are interested in estimating. For this reason in the next section we investigate the relation between the identifiable subspace of the quantities that we can measure (internal six-axis force-torque sensor) and the identifiable subspace of the measurements that we want to predict (joint torques, estimated as in \eqref{eq:localTorqueEstimationForIdentification}).   
+
+% More recently, it has been questioned 
+% whether the estimated base parameters can be used to predict other dynamic quantities different from the 
+% measurement $Y$ itself. Within this context,  in \citep{ayusawa2014} it was shown that base 
+% parameters associated with forces at base ($Y = \rmf_b$) can be used to predict joint torques 
+% $ \tau$. The result is obtained by showing that the identifiable subspace associated to ${}_{b,
+% \linkSerialization} Y _{c}$ is a subset of the one associated with $\ls_{B}Y
+% _{n}$. In the present paper we consider the problem of understanding if the base 
+% parameters associated with forces at base ($Y = \rmf_b$) can be used to implement the 
+% rRNEA described in Section \ref{sec:iDyn}. 
+
+% Since the procedure 
+% consists in redefining the base $\baseLink$ at the contact link, all we have to understand is the 
+% relationship between $\ls_{B}Y_{n}$ and ${}_{\beta,\linkSerialization}
+% Y_{n}$ for arbitrary choices of the base $\beta$.
+
+%Several approaches can be followed for constructing representations of the identifiable subspace. 
+%In \citep{kawasaki1991} and \citep{khalil2004}, authors present a symbolic method to derive the base
+% parameters considering only torque measurements and a fixed base. A more general method is 
+% presented in \citep{gautierNumerical}, where the identifiable subspace and the matrix $B$ is 
+% determined with no assumption on the structure of the regressor or the kinematic constraints on the 
+% tree.
+\begin{comment}
+\subsection{Base parameterization of the regressor structure}
+\label{sec:calcDetails}
+In this section we discuss the structure of the matrices $\ls_{B}Y_{n}$ and $
+\ls_{B}Y_{c}$ in detail. With respect to previous literature we explicitly 
+take into account how the choice of $\baseLink$
+influences the matrix structure. The reason for this new formulation lies in the fact that in the 
+following sections we will try to understand how the identifiable subspaces associated to $\ls_{B}Y_{n}$ and $\ls_{B}Y_{c}$ change with the choice of the base $\baseLink$. First, we consider the dynamic equation of the generic link $l \in L$:  
+\begin{eqnarray}
+\label{eq:netWrenchRegr}
+{}^{l} \rmf_l^B = \mathbf{I}_l \mathbf{a}_l + \mathbf{v}_l \times^{*} \mathbf{I}_l \mathbf{v}_l 
+= {}^l \mathbf{A}^B_l \phi_l ,
+\end{eqnarray}
+having defined:
+\begin{eqnarray*}
+\begin{footnotesize}
+{}^l \mathbf{A}^B_l
+=
+\begin{bmatrix}
+0           & - (\overline{\mathbf{a}}_l + \omega_l \times \overline{\mathbf{v}}_l) \times &  \dot{\omega}_l \bullet + \omega_l \times \omega_l \bullet \\
+\overline{\mathbf{a}}_l + \omega_l \times \overline{\mathbf{v}}_l  & \dot{{\omega}}_l \times + \ ({\omega}_l \times) ({\omega}_l \times) & 0
+\end{bmatrix}
+\end{footnotesize}
+\end{eqnarray*}
+
+\noindent
+and:
+\begin{eqnarray*}
+    \rmf_l^B & \quad & \mbox{net spatial force acting on body $l$} \\
+    \mathbf{I}_l & \quad & \mbox{spatial inertia of body $l$} \\
+    \mathbf{a}_l & \quad & \mbox{spatial acceleration of body $l$} \\
+    \mathbf{v}_l & \quad & \mbox{spatial velocity of body $l$}
+\end{eqnarray*}
+
+\noindent
+In equation \eqref{eq:netWrenchRegr} we have not explicitly indicated the gravitational spatial force ${}^{l} \rmf_l^g$ associated with the gravitational acceleration $\mathbf{a}_g$. Its contribution on the link $l \in L$ can be expressed as follows:
+\begin{equation} \label{eq:gravityRegr}
+{}^{l} \rmf_l^g = \mathbf{I}_l \mathbf{a}_g = {}^l \mathbf{A}_g \phi_l ,
+\end{equation}
+where:
+\begin{equation} \nonumber
+\begin{footnotesize}
+{}^l \mathbf{A}_g
+=
+\begin{bmatrix}
+0           & - {}^l\overline{\mathbf{a}}_g \times & 0 \\
+{}^l\overline{\mathbf{a}}_g & 0 & 0
+\end{bmatrix}.
+\end{footnotesize}
+\end{equation}
+
+\noindent
+The net spatial force on link $l \in L$ including gravity is therefore obtained by summing  \eqref{eq:netWrenchRegr} and \eqref{eq:gravityRegr}:
+\begin{equation}
+{}^{l} \rmf_l = {}^l\rmf_l^{B} + {}^{l} \rmf_l^{g} = 
+{}^{l}\mathbf{A}^B_l \phi_l + {}^l \mathbf{A}_g \phi_l = 
+\mathbf{A}_l \phi_l 
+\end{equation}
+The explicit expression for ${}_{\baseLink,\linkSerialization}Y_{n}$ can be derived as in \citep{atkeson1986} and takes the following form:
+\begin{multline}
+\label{eq:baseRegr}
+{}_{\baseLink,\linkSerialization}Y_{n} = \left[
+\prescript{\baseLink}{}{X}_{\mathcal{L}(0)}^{*} 
+{\mathbf{A}}_{\mathcal{L}(0)}
+  {}^{\baseLink}X_{\mathcal{L}(1)}^{*} {\mathbf{A}}_{\mathcal{L}(1)} \right. \dots
+  \\
+\dots \left. {}^{b}X_{{\mathcal{L}(\nLinks-1})}^{*} 
+ {\mathbf{A}}_{{\mathcal{L}(\nLinks-1)}}  \right].
+\end{multline}
+
+\noindent
+Given the joint serialization $\mathcal J$, the generic joint $j \in J$ is associated with a certain number of rows of the matrix ${}_{\baseLink,\linkSerialization}Y_{c}$. The number of rows is determined by the number of degrees of freedom. The rows associated to $j \in J$ are denoted by ${}_{\baseLink,\linkSerialization}Y_{c}^j$ and can be computed as follows:
+
+\begin{multline}
+\label{eq:torquesRegr}
+{}_{\baseLink,\linkSerialization}Y_{c}^{j} =  {}^{\mu_{\baseLink}(j)}\mathbf{S}_{\lambda_{\baseLink}(j),\mu_{\baseLink}(j)}^{T}
+ \left[ \sigma_b(j,\linkSerialization(0))  {}^{\mu_{\baseLink}(j)}
+ X_{{\mathcal{L}(0})}^{*} {\mathbf{A}}_{\linkSerialization(0)} \right.  \dots \\ 
+                                      \dots \left. \sigma_b(j,\linkSerialization(\nLinks-1)) {}^{\mu_{\baseLink}(j)} X_{{\mathcal{L}(\nLinks-1})}^{*} {\mathbf{A}}_{\linkSerialization(\nLinks-1)} \right] ,
+\end{multline}
+where $\sigma_b(j,i) = 1$ if $\linkSerialization(i) \in \nu_b(j)$, $0$ otherwise
+and $\mathbf{S}_{l,\iota}$ is the joint's motion subspace spatial vector defined such that $\mathbf{v}_l = \mathbf{S}_{{l,\iota}} \dot q_{l,\iota} + \mathbf{v}_{\iota}$.
+If position, velocity and acceleration of each link of the rigid body tree are available (e.g., computed by the forward step of the RNEA), then one can calculate the dynamics regressor $Y$ using \eqref{eq:netWrenchRegr}, \eqref{eq:baseRegr} and \eqref{eq:torquesRegr}.
+\end{comment}

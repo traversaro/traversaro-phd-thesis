@@ -1,0 +1,81 @@
+\section{Conclusion} 
+\label{sec:conclusion}
+In this paper we presented some theoretical and numerical advances with respect to the problem of estimating joint torques from proximal force and torque (F/T) sensors. This estimation problem was originally proposed in \cite{Fumagalli2012} and it is based on the idea of exploiting the simple Newton-Euler recursion step to propagate force and torque information across a kinematic structure. The estimation relies on the knowledge of the system inertial parameters. In this paper we address the problem of estimating these parameters directly from the F/T sensor. It is in particular shown that the parameters identifiable from the  F/T sensor (the so called base parameters) coincide with those used by the joint torque estimation procedure. This result has been obtained by extending some previous findings \cite{ayusawa2013}. 
+
+Validation of the proposed theoretical framework has been conducted on the iCub humanoid robot, which is equipped with both F/T sensors and joint torque sensing. On-line estimation of the base inertial parameters have been performed by means of F/T sensor measurements only. The estimated base parameters have been used to compute joint torques from F/T measurements as in \cite{Fumagalli2012}. Comparison with direct joint torque measurement (used in this context as ground truth) shows the efficacy of the proposed estimation procedure. 
+
+%\appendix \label{app:estimation}
+%
+%\textbf{Offline Identification.} Using a probabilistic framework, it is possible to write \eqref{eq:bigRegression} as:
+%\begin{equation}
+%\mathbf{g}_N
+%= 
+%\mathbf{G}_N
+%\baseParameters
+%+
+%\begin{bmatrix}
+%\boldsymbol\epsilon_n^1
+%\\
+%\boldsymbol\epsilon_n^2
+%\\
+%\dots
+%\\
+%\boldsymbol\epsilon_n^N
+%\end{bmatrix}
+%= 
+%\mathbf{G}_N
+%\baseParameters
+%+
+%{\boldsymbol\epsilon_n}_N,
+%\end{equation}
+%where the output error ${\boldsymbol\epsilon_n}_i$ is assumed to be a multivariate Gaussian random variable independent and identically distributed between each sample, with mean $\mathbf{0}$ and covariance matrix $\boldsymbol\Sigma_n$. Under these assumptions the base parameters can be modeled as a multivariate Gaussian random variable, whose distribution is, given the regressor and output measurements:
+%$
+%\baseParameters \sim \mathcal{N} ( \hat{\baseParameters}_N , {\boldsymbol\Sigma_{\baseParameters}}_N )
+%$, where:
+%$
+%{\boldsymbol\Sigma_{\baseParameters}}_N = ( 
+%\mathbf{G}_N^{\top}
+% {{\boldsymbol\Sigma}_n}_N^{-1} 
+%\mathbf{G}_N )^{-1}$, 
+%$
+%{\baseParameters}_N = {\boldsymbol\Sigma_{\baseParameters}}_N   
+%\mathbf{G}_N^{\top}
+%{{\boldsymbol\Sigma}_n}_N^{-1}  \mathbf{g}_N,
+%$ and
+%$$
+%{{\boldsymbol\Sigma}_n}_N^{-1} = \begin{bmatrix}
+%                            \boldsymbol\Sigma_n^{-1} &  \cdots & \mathbf{0} \\
+%                            \vdots      & \ddots & \vdots     \\
+%                            \mathbf{0}  & \cdots & \boldsymbol\Sigma_n^{-1}
+%                        \end{bmatrix}. 
+%                        $$
+%The expression for the mean of this posterior distribution is the solution to the usual weighted least squares problem, using an appropriate weight matrix.
+%
+%\textbf{Online estimation.} Online estimation has the advantage of being quite useful in practical applications: the number of measures is increasing at each time step and therefore instead of computing $\baseParameters$ given the fixed set of measurements $\mathbf f^1$, $\dots$, $\mathbf f^N$, we are interested of computing $\baseParameters_t$ with $t = 1$, $2$, $\dots$ given $\mathbf f^1$, $\dots$, $\mathbf f^t$. The estimate at time $t$ is therefore:
+%\begin{equation}
+%\label{eq:paramEstN}
+%\hat{\baseParameters}_t = (\mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} \mathbf{G}_t)^{-1} \mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} {\mathbf{g}}_t.
+%\end{equation}
+%To update the estimated parameters $\hat{\baseParameters}_t$ we use the Cholesky decomposition to guarantee a constant time update and numerical accuracy. The second factor of \eqref{eq:paramEstN} can be efficiently updated in a direct way:
+%$
+%\mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} {\mathbf{g}}_t = 
+%\mathbf{G}_{t-1}^{\top} {{\boldsymbol\Sigma}_n}_{t-1}^{-1} {\mathbf{g}}_{t-1} + 
+%{\genericBigBaseRegressor^t}^{\top} \boldsymbol\Sigma_n^{-1} {\mathbf{f}}^t.
+%$
+%The other factor in \eqref{eq:paramEstN}, the matrix $(\mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} \mathbf{G}_t)^{-1}$, is represented with the Cholesky factorization of its inverse:
+%$
+%\mathbf{L}_t \mathbf{L}_t^{\top} = \mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} \mathbf{G}_t,
+%$
+%where the Cholesky factor $\mathbf{L}_t$ can be updated using the rank-one Cholesky factor update. Computations of $\hat{\baseParameters}_t$ as in \eqref{eq:paramEstN} given $\mathbf{L}_t$ and $\mathbf{G}_t^{\top} {{\boldsymbol\Sigma}_n}_t^{-1} {\mathbf{g}}_t$ can also be optimized by exploiting the forward and backward substitution.
+
+%\subsubsection{Cholesky update}
+%The updating of the Cholesky factor $\mathbf{L}_t$ follows the equation:
+%\begin{equation}
+%\label{eq:factorUpdate}
+%\mathbf{L}_t \mathbf{L}_t^{\top} = \mathbf{L}_{t-1} \mathbf{L}_{t-1}^{\top} + {{\genericBigBaseRegressor}^t}^{\top} {\mathbf{V}} \mathbf{V}^{\top} {\genericBigBaseRegressor}^{t}
+%\end{equation}
+%With $\boldsymbol\Sigma_n^{-1} = \mathbf{V}\mathbf{V}^{\top}$ the Cholesky decomposition of the weight matrix (always existing as $\boldsymbol\Sigma_n^{-1}$ is positive definite, trivial if $\boldsymbol\Sigma_n^{-1}$ is diagonal). This is equivalent to a low rank update of the Cholesky factor, as defined in \cite{seeger2007low}. By writing \eqref{eq:factorUpdate} as:
+%\begin{equation}
+%\mathbf{L}_t \mathbf{L}_t^{\top} = \mathbf{L}_{t-1} \mathbf{L}_{t-1}^{\top} + \sum_{i=1}^{n_m} {\mathbf{c}_i}_t {\mathbf{c}_i}_t^{\top} 
+%\end{equation}
+%where ${\mathbf{c}_i}_t^{\top}$ is the $i$th row of $\mathbf{V}^{\top} \genericBigBaseRegressor^{t}$, it is possible to see that the same updating can be done as a series of $n_m$ rank-one Cholesky updates (where $n_m$ is the dimension of a measurement sample). This is a useful property for implementing the Cholesky update using a rank-one update routine, without having to implement a low-rank update routine.

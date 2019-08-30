@@ -1,0 +1,36 @@
+\subsection{Full physical consistency}
+In this subsection, we propose a new condition for assessing if a vector of inertial parameters can be generated from a physical rigid body.  
+We will show that all the constraints that emerge due to this \emph{full physical consistency} condition are due to the non-negativity on the density function.
+\begin{definition}
+\label{eq:fullDefinition}
+A vector of inertial parameters $\pi^* \in \mathbb{R}^{10}$ is called \emph{fully physical consistent}  if: 
+\begin{IEEEeqnarray}{rCl}
+\exists\ \rho(\cdot) : \mathbb{R}^3 \mapsto \mathbb{R}_{\geq 0} ~ \text{s.t.} ~ \pi^* = \pi_d(\rho(\cdot)).
+\end{IEEEeqnarray}
+\end{definition}
+This definition extends the concept of \emph{physical consistent} inertial parameters to include also all possible constraints of inertial parameters, such as the triangular inequalities \eqref{eq:triangularInequalities} of the diagonal elements of the inertia matrix.
+
+\begin{lemma}
+\label{lemma:lemma1}
+If a vector of inertial parameters $\pi \in \mathbb{R}^{10}$ is \emph{fully physical consistent} if follows that it is \emph{physical consistent}, according to Definition \ref{def:physicalConsistency}. 
+\end{lemma}
+\begin{proof}
+If $\pi$ is \emph{fully physical consistent}, then it follows that there exists $\rho(\cdot)$ such that the corresponding 3D inertia at the center of mass $I_C$ can be written as a function of $\rho(\cdot)$. The positive semi-definiteness of $m$ and $I_C$ then follows from the classical properties of mass and the inertia matrix of a rigid body, see for example subsection 3.3.3 of \cite{wittenburg2007dynamics}. 
+\end{proof}
+
+\begin{lemma}
+If a vector of inertial parameters $\pi \in \mathbb{R}^{10}$ is \emph{fully physical consistent}, the associated inertia matrices at the body origin $I_B(\pi)$ and at the center of mass $I_C(\pi)$ respect the triangular inequalities \eqref{eq:triangularInequalities}. 
+\end{lemma}
+
+\begin{proof}
+This lemma can be proved by writing $I_B$ or $I_C$ as a functional of the density function $\rho(\cdot)$, as in the proof of Lemma \ref{lemma:lemma1}. Once $I_B$ or $I_C$ are written as a functional of $\rho(\cdot)$, the demonstration that they respect the triangle inequality can be found in any rigid body mechanics textbook,  see for example subsection 3.3.4 of \cite{wittenburg2007dynamics}. 
+\end{proof}
+To get a hint of the demonstration of Lemma 2, consider that the diagonal elements of the 3D inertia matrix with respect to an arbitrary frame can still be written as the sum of two non-negative  \emph{second moments of mass}. The triangle inequality then arises in a way similar to the case of the inertia expressed in the principal axes.
+
+
+\subsection{Full physical consistent parametrization of inertia parameters}
+In this subsection, we introduce a novel nonlinear parametrization of inertial parameters that ensures the \emph{full physical consistency} condition. 
+
+We choose to parametrize the mass as an element of the spaces of non-negative numbers $m \in \mathbb{R}_{\geq 0}$. 
+
+The center of mass do not have any constraints on its location, so we choose to parametrize it as an element of the 3D space $c \in \mathbb{R}^3$. 

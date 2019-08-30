@@ -1,0 +1,95 @@
+\section{Problem statement and assumptions}
+\label{sec:ft-calib-background}
+
+We assume that the model for predicting the force-torque (also called wrench)  
+% applied to the sensor 
+from the raw measurements is an affine model, i.e. 
+% \begin{equation}
+% \rawval = \shapemat \hspace{0.2em} \senswrench -  {o_r}
+% \end{equation} 
+% Consequently, the output of the sensor can be computed as $\nrofsg$ 
+%(with $m \geq 6$) 
+% raw strain gauges values is :
+\begin{equation}
+\label{wrenchInSensorCoordinates}
+\rmf =  C ( r - \offset ),
+% =  {C} \left( \rawval -  {o_r} \right)
+\end{equation} 
+where
+% \begin{itemize}
+% \item 
+$\rmf \in \mathbb{R}^{6}$ is the wrench exerted on the sensor expressed in the sensor's frame,
+% \item 
+$r \in \mathbb{R}^{\nrofsg}$ is the raw output of the sensor,
+% \item 
+$ {C} \in \mathbb{R}^{6 \times \nrofsg}$ is the
+%full row rank 
+invertible
+calibration matrix, and
+% \item 
+$\offset \in \mathbb{R}^6$ is the sensor's bias or offset.
+The calibration matrix and the offset are assumed to be constant.
+% \end{itemize}
+
+We assume that the sensor is attached to a rigid body
+% mechanical structure --~such as a robot manipulator, 
+% see Figure~\ref{photoOfTheIcubLegOrArmWhereYouSeeTheMachanincalChainAttachedToIt}~-- and that
+% this structure posses $n$ degrees of freedoms. The associated configuration of this structure can be
+% then characterized by an $n$-dimensional column vector $q \in \mathbb{R}^n$. 
+% The mechanical structure has a total 
+of 
+(constant) mass $m~\in~\mathbb{R}^+$ and with a center of mass whose position
+w.r.t. the sensor frame ${S}$ is characterized the vector $c \in \mathbb{R}^3$.
+
+% \[{\bf{OC}}(q) = ({\bf{i_0}},{\bf{j_0}},{\bf{k_0}})\bar{c}(q) = ({\bf{i}},{\bf{j}},{\bf{k}})c(q).\]
+% \[\bar{c} = Tc,\]
+% with $\bar{c},c \in \mathbb{R}^3$ the vector of the center of mass expressed w.r.t. the inertial and sensor frame, respectively.
+The gravity 3D force applied to the 
+% structure 
+body
+is  given by 
+\begin{IEEEeqnarray}{RCL}
+ \label{eq:g}
+ m\bar{g} = m \ls^A R_B^T g ,
+\end{IEEEeqnarray}
+with $\bar{g},g \in \mathbb{R}^3$ the gravity acceleration expressed w.r.t. the inertial and sensor frame, respectively. The gravity acceleration $\bar{g}$ is constant, so the vector $g$ does not have a constant direction, 
+but has a constant norm.
+
+Finally, we make the following main assumption.
+
+\begin{assumption}
+ The raw measurements $r$ are taken for static configurations of the 
+ rigid body
+%  mechanical structure 
+ attached to the sensor, i.e. the angular velocity of the frame $S$ is always zero.
+ Also, the gravity acceleration $g$ is measured by an accelerometer installed on the rigid body.
+%  $\tfrac{d q}{dt} \equiv 0$. 
+  Furthermore, no external force-torque, but the gravity force, acts on the rigid body. Hence
+\end{assumption}
+
+\begin{IEEEeqnarray}{RCL}
+\label{eq:staticWrench}
+\rmf &=& 
+M(m,c) g, \IEEEyessubnumber  \\
+M(m,c) &:=& m
+\begin{pmatrix}
+1_3 \\
+c \times 
+\end{pmatrix}. \label{matrixM}  \IEEEyessubnumber 
+% = 
+% \mathbf{M} \hspace{0.2em}{}^s\mathbf{g}
+% =
+% \mathbf{M} \hspace{0.2em}
+% {}^s\rawval_w {}^w \mathbf{g}
+\end{IEEEeqnarray} 
+
+\begin{remark}
+We implicitly assume that the accelerometer frame is aligned with the force-torque sensor frame. 
+This is a convenient, but non necessary, assumption. 
+In fact, if the relative rotation between the sensor frame ${S}$ and the accelerometer frame is unknown, 
+it suffices to consider the accelerometer frame as the sensor frame ${S}$.
+\end{remark}
+
+Under the above assumptions, what follows proposes a new method for estimating the sensor's offset $o$ 
+and for identifying the sensor's calibration matrix $C$ without the need of removing the sensor from the 
+hosting system.

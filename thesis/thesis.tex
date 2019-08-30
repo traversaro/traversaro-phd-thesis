@@ -1,0 +1,69 @@
+\documentclass[oneside,letterpaper,11pt]{report}
+
+% ********************************** Preamble **********************************
+% Preamble: Contains packages and user-defined commands and settings
+\input{Preamble/preamble}
+
+% Graphics path
+\graphicspath{ {Figs/} }
+
+
+% ******************************** Front Matter ********************************
+\begin{document}
+
+\include{front-matter}
+\clearpage\null\pagenumbering{gobble}\newpage
+% \include{Dedication/dedication}
+% \include{Declaration/declaration}
+\include{Abstract/abstract}
+\clearpage\null\pagenumbering{gobble}\newpage
+
+% Use roman numerals for ack + contents 
+\setcounter{page}{1}
+\renewcommand{\thepage}{\roman{page}}%
+\include{Acknowledgement/acknowledgement}
+
+% *********************** Adding TOC and List of Figures ***********************
+
+\tableofcontents
+
+% \printnomenclature
+
+% ******************************** Main Matter *********************************
+
+\newpage
+\setcounter{page}{1}
+\renewcommand{\thepage}{\arabic{page}}%
+
+\include{Chapter10Introduction/chapter-introduction}
+\include{Chapter20RigidBody/chapter-rigidbody}
+\include{Chapter30MultiBody/chapter-multibody}
+\include{Chapter40ExtForceEstimation/chapter-forces-estimation}
+\include{Chapter50ForceTorqueCalibration/chapter-ft-sensors}
+\include{Chapter60SingleBodyInertialParameters/chapter-inertial-parameters}
+\include{Chapter70MultiBodyInertialParameters/chapter-multibody-inertial-parameters}
+
+
+% ********************************** Back Matter *******************************
+% Backmatter should be commented out, if you are using appendices after References
+%\backmatter
+
+% ********************************** Bibliography ******************************
+\begin{spacing}{0.9}
+
+\cleardoublepage
+
+\bibliography{References/PHDThesis} % Path to your References.bib file
+\bibliographystyle{plainnat}
+
+
+\end{spacing}
+
+% ********************************** Appendices ********************************
+
+\begin{appendices}
+\include{Appendix1/appendix1}
+\end{appendices}
+
+
+\end{document}

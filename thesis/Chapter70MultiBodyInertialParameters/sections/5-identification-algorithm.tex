@@ -1,0 +1,79 @@
+\section{Online Identification Method}
+\label{sec:onlineIdentification}
+Classically inertial parameter identification is accomplished by collecting sample measurements of kinematic quantities (joint positions, speeds, accelerations) and forces acting on the robot (external forces, joint torques).
+
+The samples measurements of kinematic quantities are then used to compute a regressor that linearly relates
+the inertial parameters to the force measures. This regressor could be the entire dynamic regressor $\mathbf{Y}$ in \eqref{eq:regrDynamics} if both internal torques and base wrench are available. More typically, when only joint torques are measured, inertial parameters in $I_{\mathbf {Y}_{\beta,c}}$ can be estimated using the regressor $\mathbf{Y}_c$. In our application instead, the availability of an F/T sensor at the base allows us to estimate the inertial parameters in $I_{\mathbf {Y}_{\beta,n}}$ using the regressor $\mathbf{Y}_n$.
+
+Independently of available measurements ($\mathbf f$) and the associated regressor ($\mathbf {Y}$) estimation can be obtained by considering repeated measurements $\mathbf{f}^1$, $\dots$, $\mathbf{f}^N$ reorganized as follows:
+\begin{equation}
+\label{eq:bigRegr}
+\begin{bmatrix} 
+\genericRegressor^1 
+\\
+\genericRegressor^2
+\\
+\dots
+\\
+\genericRegressor^N
+\\
+\end{bmatrix}
+\boldsymbol\phi
+=
+\begin{bmatrix}
+\mathbf{f}^1
+\\
+\mathbf{f}^2
+\\
+\dots
+\\
+\mathbf{f}^N
+\end{bmatrix}.
+\end{equation}
+Posed in this form, given the considerations that we have presented in section \ref{sec:baseParam}, this equation is underconstrained for the vector $\boldsymbol\phi$. In practice, the matrix that multiplies $\boldsymbol\phi$ is rank deficient and even a least square solution have an infinite number of equivalent optima. Again recalling what we presented in section \ref{sec:baseParam}, only the elements of identifiable 
+subspace $I_{\mathbf {Y}}$ associated to $\mathbf {Y}$ can be identified. We can therefore calculate directly the base parameters defined as $\boldsymbol\baseParameters = \mathbf{B}^{\top} \boldsymbol\phi$, being $\mathbf{B}$ a matrix whose columns are an orthonormal base for $I_\mathbf{Y}$. This matrix can be calculated for an arbitrary structure using the algorithm described in \cite{gautierNumerical}. It is then possible to reformulate \ref{eq:bigRegr} as:
+\begin{equation}
+\label{eq:bigTildeRegr}
+\begin{bmatrix} 
+\genericRegressor^1 \mathbf{B}
+\\
+\genericRegressor^2 \mathbf{B}
+\\
+\dots
+\\
+\genericRegressor^N \mathbf{B}
+\\
+\end{bmatrix}
+\baseParameters 
+=
+\begin{bmatrix} 
+\genericBigBaseRegressor^1 
+\\
+\genericBigBaseRegressor^2 
+\\
+\dots
+\\
+\genericBigBaseRegressor^N 
+\\
+\end{bmatrix}
+\baseParameters 
+=
+\mathbf{G}_N
+\baseParameters 
+=
+\mathbf{g}_N
+=
+\begin{bmatrix}
+\mathbf{f}^1
+\\
+\mathbf{f}^2
+\\
+\dots
+\\
+\mathbf{f}^N
+\end{bmatrix}.
+\end{equation}
+Using this equation, only the base parameters $\baseParameters$ (i.e. the projection of the parameters on the identifiable subspace $I_{\genericRegressor}$) are be estimated. As shown in section \ref{sec:baseParam}, these parameters are anyway sufficient for the application we are currently considering. Estimation can be performed either off-line or on-line (see the Appendix), the latter being the one employed in the presented results (Section \ref{sec:validation}). 
+
+%The online estimation scheme presented in the previous section can be implemented for whole-body movement on the iCub robot, preparing a online estimate for each subtree induced by the F/T sensors. For the regression the base regressor \eqref{eq:baseRegr} can be used for all subtree. Then the actual estimation step  is done only for the subtrees that are not in contact with the enviroment. This contact information can be easily provided by the distribute tactile sensors, if available. In this way, it is possible to estimate online the parameters for every body part, assuming that at least sometimes every part is not in contact with the enviroment (i.e. the robot walks, and does not simply balance in the same place).
+

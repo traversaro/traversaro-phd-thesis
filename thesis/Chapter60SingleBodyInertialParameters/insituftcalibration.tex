@@ -1,0 +1,115 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphicx} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+\usepackage{amssymb}  % assumes amsmath package installed
+% \usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{subfig}
+
+\newcommand{\x}{\ensuremath{\times}}
+
+\title{\LARGE \bf
+In Situ Calibration of Six-Axis Force-Torque Sensors \\ using Accelerometer Measurements*
+}
+
+
+\author{Silvio Traversaro and Daniele Pucci and Francesco Nori% <-this % stops a space
+\thanks{*This paper was supported by the FP7 EU projects CoDyCo (No. 600716
+ICT 2011.2.1 Cognitive Systems and Robotics) and Koroibot (No. 611909
+ICT-2013.2.1 Cognitive Systems and Robotics).}% <-this % stops a space
+\thanks{All authors belong to the Istituto Italiano di Tecnologia, RBCS department, Genova, Italy. Email: {\tt\small name.surname@iit.it}}%
+}
+
+
+
+\begin{document}
+
+%\graphicspath{{./images/}}
+\newcommand{\prop}[2]{\textbf{Proposition #1. }\textit{#2}}
+\newcommand{\remark}[2]{\textbf{Remark #1. }\textit{#2}}
+\newcommand{\lemma}[2]{\textbf{Lemma #1. }\textit{#2}}
+\newcommand{\hp}[2]{\textbf{Assumption #1. }\textit{#2}}
+\newcommand{\nrofsg}{6}
+\newcommand{\calibmat}{\mathbf{C}}
+\newcommand{\shapemat}{\mathbf{S}}
+\newcommand{\rawval}{\mathbf{r}}
+\newcommand{\senswrench}{{}^s\mathbf{w}}
+\newcommand{\sensgrav}{{}^s\mathbf{g}}
+\newcommand{\offsetwrench}{{}^\mathbf{o_w}}
+\newcommand{\offsetraw}{\mathbf{o_r}}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\newtheorem{hypothesis}{Assumption}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+This paper proposes techniques to calibrate six-axis force-torque sensors that can be performed \emph{in situ}, i.e., without removing the sensor from
+the hosting 
+system. 
+We assume that the force-torque sensor is attached to a rigid body equipped with an accelerometer. Then, the proposed calibration 
+technique uses the measurements of the accelerometer, but
+% do not 
+requires neither the knowledge of the inertial parameters 
+% mass and the center of mass 
+% of the rigid body 
+nor the orientation
+% , with respect to gravity, 
+of the rigid body. 
+The proposed method exploits the geometry induced by the model between the raw measurements of the 
+sensor and the corresponding force-torque. 
+% Furthermore, it does not require the knowledge of the mass and center of mass of the body to which the force-torque sensor is attached.
+The validation of the approach is performed by calibrating two six-axis force-torque sensors of the iCub humanoid 
+robot.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{sections/introduction.tex}
+
+\input{sections/background.tex}
+
+\input{sections/method.tex}
+
+\input{sections/experimental.tex}
+
+\input{sections/conclusions.tex}
+
+%\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibl}
+
+
+\end{document}

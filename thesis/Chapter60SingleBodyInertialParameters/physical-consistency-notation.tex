@@ -1,0 +1,60 @@
+\subsection{Notation}
+The following notation is used throughout the paper.
+\begin{itemize}
+ \item The set of real numbers is denoted by $\mathbb{R}$, while the set of nonnegative real numbers is denoted by $\mathbb{R}_{\geq 0}$. 
+ \item Let $u$ and $v$ be two $n$-dimensional column vectors of real numbers, i.e. $u,v \in \mathbb{R}^n$, 
+ their inner product is denoted as $u^\top v$, with ``$\top$'' the transpose operator.
+\item
+$\SO(3)$ denotes
+the set of $\mathbb{R}^{3 \times 3}$ orthogonal matrices with determinant equal to one, namely
+\begin{align*}
+\SO(3) :=  \{\, R \in \mathbb{R}^{3 \times 3} \mid R^T R = I_3 , \hspace{0.3em} \operatorname{det}(R) = 1 \,\}.
+\end{align*}
+\item Given $u,v \in \mathbb{R}^3$, $S(u) \in \R^{3\times3}$ denotes the skew-symmetric matrix-valued operator associated with the cross product in 
+  $\mathbb{R}^3$, such that $S(u) v = u \times v$
+ \item The Euclidean norm of a vector of real numbers is denoted by $\left\|\cdot \right\|$.
+%  \item $b_i \in \mathbb{R}^n$ denotes the column vector of $n$ zeros but the $\imath$th coordinate, which is equal to one. 
+\item $1_n \in \mathbb{R}^{n \times n}$ denotes the identity matrix of dimension~$n$; 
+$0_n \in \mathbb{R}^n$ denotes the zero column vector of dimension~$n$; $0_{n \times m} \in \mathbb{R}^{n \times m}$ denotes the zero matrix of dimension~$n \times m$.
+\item $A$ denotes an inertial frame and $B$ a body-fixed frame.
+\item $p_B \in \mathbb{R}^3$ denotes the origin of the $B$ frame expressed in the inertial frame, while $\ls^A R_B \in SO(3)$ is the rotation matrix that transforms a 3D vector expressed with the orientation of the $B$ frame in a 3D vector expressed in the $A$ frame. $\omega \in \mathbb{R}^3$ denotes the body angular velocity of body $B$, defined as $S(\omega) = \ls^A R_B^\top \ls^A \dot{R}_B$.
+\item $\rmv \in \mathbb{R}^6$ indicates the body twist \cite[Chapter 3]{murray1994mathematical}, i.e.
+$$
+\rmv = \begin{bmatrix} \ls^A R_B^\top \dot{p}_B \\ \omega \end{bmatrix}$$
+\item $\rmf \in \mathbb{R}^6$ indicates an external wrench exerted on the body \cite[Chapter 3]{murray1994mathematical}, i.e. 
+$$\rmf = \begin{bmatrix} f \\ \mu \end{bmatrix}$$
+where $f$ is the 3D external force and $\mu$ the 3D external moment, that are expressed in frame $B$. 
+\item Given $\rmv = \begin{bmatrix} v^\top & \omega^\top \end{bmatrix}^\top \in \mathbb{R}^6$,  $\rmv \bar \times^*$ is the 6D force cross product operator \cite{featherstone2008}, defined as:
+$$
+\rmv \bar \times^* 
+= 
+\begin{bmatrix}
+S(\omega) & 0_{3\times3} \\
+S(v)      & S(\omega) 
+\end{bmatrix}
+$$
+\item Given a symmetric matrix $I \in \mathbb{R}^{3\times3}$ the $\operatorname{vech}$ operator denotes the serialization operation on symmetric matrices:
+$$
+\operatorname{vech} \left(
+\begin{bsmallmatrix}
+I_{xx} & I_{xy} & I_{xz} \\
+I_{xy} & I_{yy} & I_{yz} \\
+I_{xz} & I_{yz} & I_{zz}
+\end{bsmallmatrix} \right)
+=
+\begin{bsmallmatrix}
+I_{xx} \\
+I_{xy} \\
+I_{xz} \\
+I_{yy} \\
+I_{yz} \\
+I_{zz}
+\end{bsmallmatrix}
+$$
+\item Given a symmetric matrix $I \in \mathbb{R}^{n\times n}$, $I \succeq 0$ denotes that the matrix is positive semidefinite, i.e. that all its eigenvalues are nonnegative.  
+\item $ g \in \mathbb{R}^3$ is the constant vector of gravity acceleration expressed with the orientation of the inertial frame $A$.
+\item $\rma^g \in \mathbb{R}^6$ denotes the \emph{proper} body acceleration, i.e. the difference between the body acceleration and the gravity acceleration:
+$$
+\rma^g = \dot{\rmv} - \begin{bmatrix} ~^A R_B^\top g \\ 0_{3} \end{bmatrix}
+$$
+\end{itemize}

@@ -1,0 +1,93 @@
+\section{Inertial Parameter Identification and Torque Estimation}
+\label{sec:iDynIdentification}
+
+In this section we 
+demonstrate that the inertial parameters inertial parameters used for torque estimation are a subset of the inertial parameters that can be estimated from the submodel regressors given in \eqref{eq:allSubModelsRegressors}.
+
+\begin{property}[Identifiable subspace of sum of two regressors]
+\label{prop:identSumOfRegressors}
+Given the regressors ${Y_a}$,${Y_b}$ and ${Y_c} = {Y_b} + {Y_a}$ the 
+identifiable subspace of $Y_c$ is given by:
+\begin{equation}
+\label{eq:identSumOfRegressors}
+I_{{Y}_c} \subseteq I_{{Y}_a} + I_{{Y}_b} .
+\end{equation}
+\end{property} 
+\begin{proof}
+From the definition of non-identifiable subspace \eqref{eq:nonIdentDef} we have:
+$$
+N_{{Y}_a} \cap  N_{{Y}_b} \subseteq N_{{Y}_c} .
+$$
+Using the definition of identifiable subspace \eqref{eq:identDef} and the De Morgan laws for vector spaces one obtains \eqref{eq:identSumOfRegressors}.
+\end{proof}
+
+\begin{property}[Identifiable subspace of combination of two regressors]
+\label{prop:eqRegrComb}
+Given two regressors ${Y_a}$,${Y_b}$ and the \emph{combined} regressor ${Y_c} = \begin{bmatrix} {Y_a} \\ {Y_b} \end{bmatrix}$ the identifiable subspace of the combined regressor is given by:
+\begin{equation}
+\label{eq:eqRegrComb}
+I_{{Y}_c} = I_{{Y}_a} + I_{{Y}_b} .
+\end{equation}
+\end{property}
+\begin{proof}
+From the definition of non-identifiable subspace \eqref{eq:nonIdentDef} we have:
+$$
+N_{{Y}_a} \cap  N_{{Y}_b} = N_{{Y}_c} .
+$$
+Using \eqref{eq:identDef} and the De Morgan laws for vector spaces one obtains \eqref{eq:eqRegrComb}.
+\end{proof}
+
+\begin{lemma}[Identifiable subspace of a regressor multiplied by a full rank square matrix]
+Given a regressor $Y_a$ and the regressor obtained by multiplyng $Y_a$ by a always full-rank square matrix $M$: $Y_b = M Y_a$ the identifiable subspace of $Y_b$ is equal to the one of $Y_a$, i.e. :
+\begin{equation}
+Y_b = Y_a 
+\end{equation}
+\end{lemma}
+
+\begin{theorem}
+The identifiable subspace of the base dynamics regressor $Y_b$ is equal to the identifiable subspace of the full dynamics regressor $Y$, both defined in \eqref{eq:regrDynamics}, i.e.: 
+\begin{equation}
+\label{eq:baseAndFullIdentifiableAreEquivalent}
+I_{Y} = I_{{Y}_b}
+\end{equation}
+furthermore the shape dynamics regressors $Y_{s}$ is a subspace of the base dynamics regressor $Y_b$, i.e.:
+\begin{equation}
+\label{eq:shapeIdentifiableIsSubSpaceOfBase}
+I_{Y_s} \subseteq I_{{Y}_b} .
+\end{equation}
+
+\end{theorem}
+\begin{proof}
+The proof for the first part of this theorem is provided in \citep{ayusawa2013}. For the second part, it is a consequence of Property~\ref{prop:eqRegrComb} that $I_{Y_s} \subseteq I_{{Y}}$, by combining this with \eqref{eq:baseAndFullIdentifiableAreEquivalent} one obtains \eqref{eq:shapeIdentifiableIsSubSpaceOfBase}.
+\end{proof}
+
+\begin{theorem}
+ Given a multibody system equipped with internal six-axis force-torque sensors, the identifiable subspace of the dynamics regressor $I_Y$ is a subspace of the identifiable subspace of the combined regressor of all submodel base dynamics $I_{Y_{\mathfrak{M}}}$, i.e.: 
+ \begin{equation}
+ \label{eq:subModelIdentifiableIsMoreThanDynamics}
+I_Y \subseteq I_{Y_{\phi_\mathfrak{M}}}  
+ \end{equation}
+\end{theorem}
+\begin{proof}
+From Property~\ref{prop:eqRegrComb} we have that $I_{Y_{\phi_\mathfrak{M}}}$ is given by:
+\begin{equation}
+I_{Y_{\phi_\mathfrak{M}}} = \sum_{sm \in \mathfrak{M}} I_{Y_{\phi_{sm}}}
+\end{equation}
+while from Property~\ref{prop:identSumOfRegressors} and from the structure of $Y_b$ we have that
+\begin{equation}
+I_{Y_b} \subseteq \sum_{sm \in \mathfrak{M}} I_{Y_{\phi_{sm}}}. 
+\end{equation}
+Combining these two statements with \eqref{eq:baseAndFullIdentifiableAreEquivalent} one obtains \eqref{eq:subModelIdentifiableIsMoreThanDynamics}.
+\end{proof}
+
+\begin{theorem}
+ Given a multibody system equipped with internal six-axis force-torque sensors, and one submodel $sm \in \mathfrak{M}$ induced by the force-torque sensors for every joint $J$ belonging to $sm$ the identifiable subspace of the regressor used for torque estimation  \eqref{eq:localTorqueEstimationForIdentification} is a subspace of the identifiable subspace of the regressor of the submodel base dynamics $I_{Y_{\mathfrak{M}}}$, i.e.: 
+ \begin{equation}
+ \label{eq:subModelIdentifiableIsMoreThanSubmodelJointRegressors}
+\forall J \in \jointSet-\jointSet_0 \ \ \
+I_{Y_{\hat{\tau}_{J}}} \subseteq I_{Y_{\phi_{sm}}} .
+ \end{equation}
+\end{theorem}
+\begin{proof}
+If we consider the submodel $sm$ as an indipendent multibody system rather then as a submodel, we would have that the base submodel dynamics regressor $Y_{\phi_{sm}}$ would be exactly $Y_{b}$, while, by choosing an appropriate base link $I_{Y_{\hat{\tau}_{J}}}$ would be a line of $Y_s$. Then, the theorem is demonstrated as a consequence of \eqref{eq:shapeIdentifiableIsSubSpaceOfBase}.
+\end{proof}

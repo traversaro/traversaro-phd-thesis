@@ -1,0 +1,256 @@
+% ********************Captions and Hyperreferencing / URL **********************
+
+\usepackage[table]{xcolor}
+\usepackage[hidelinks]{hyperref}
+% \hypersetup{
+%    colorlinks=false,
+%  linkbordercolor=red,% hyperlink borders will be red
+%  pdfborderstyle={/S/U/W 1}% border style will be underline of width 1pt
+% }
+
+\RequirePackage[labelsep=space,tableposition=top]{caption}
+\renewcommand{\figurename}{Fig.} %to support older versions of captions.sty
+
+
+% *************************** Graphics and figures *****************************
+
+
+% FT calibration
+\usepackage{subfig}
+
+% Comment large part of text 
+\usepackage{comment}
+
+% ********************************** Tables ************************************
+\usepackage{booktabs} % For professional looking tables
+\usepackage{multirow}
+
+
+
+% *********************************** SI Units *********************************
+\usepackage{siunitx} 
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb} % e.g., blacksquare
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{natbib}
+
+% bsmallmatrix
+\usepackage{mathtools}
+
+% IEEEeqnarray
+\usepackage{IEEEtrantools}
+
+% overpic
+\usepackage{overpic}
+
+\usepackage[utf8]{inputenc}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{hhline}
+
+\usepackage{float}
+\usepackage{rotating}
+
+\usepackage[disable]{todonotes}
+
+% Fontawesome
+\usepackage{fontawesome}
+
+% setspace
+\usepackage{setspace}
+
+% Appendix 
+\usepackage[toc,page]{appendix}
+
+% Epigraph 
+\usepackage{epigraph}
+
+% *********** Multibody notation ****
+\newcommand{\R}{\mathbb{R}}     % Real numbers
+
+\newcommand{\rmv}{{\rm v}}      % 6D velocity
+\newcommand{\rmf}{{\rm f}}      % 6D force
+\newcommand{\rmh}{{\rm h}}      % 6D momentum
+\newcommand{\rma}{{\rm a}}      % 6D acceleration
+
+\newcommand{\rmu}{{\rm u}}      % 6D vector
+\newcommand{\rmw}{{\rm w}}      % 6D vector
+
+\newcommand{\rms}{{\rm s}}      % 6D joint motion subspace vector
+
+\DeclareMathOperator{\D}{D}     % differentiation
+
+
+\newcommand{\bts}{{\bar\times^*}}  % dual cross product 
+
+\newcommand{\SO}{\textrm{SO}}
+\newcommand{\so}{\mathfrak{so}}
+\newcommand{\SE}{\textrm{SE}}
+\newcommand{\se}{\mathfrak{se}}
+\newcommand{\ls}{\hspace{0em}}     % For left scripts: use \ls^A_B X^C_D
+\newcommand{\phm}{\phantom{-}}   % For alignment 
+\newcommand{\ipspace}{\mathfrak{P}}
+
+
+\DeclareMathOperator{\Ad}{Ad}
+\DeclareMathOperator{\ad}{ad}
+
+\newcommand{\bbI}{\mathbb{I}}     % inertia tensor
+\newcommand{\bbM}{\mathbb{M}}     % generalized inertia tensor 
+                                 
+% 
+\newcommand{\wrenchTrans}[2]{{\ls_{#1}X^{#2}}}
+\newcommand{\twistTrans}[2]{{\ls^{#1}X_{#2}}}
+
+\DeclareMathOperator*{\argmin}{arg\ min.}
+
+\newcommand{\baseParameters}{\pi} 
+\newcommand{\genericRegressor}{{Y}}
+\newcommand{\genericBigBaseRegressor}{\Upsilon}
+\newcommand{\linkSerialization}{{\text{LinkIndex}}}
+\newcommand{\baseLink}{{b}}
+\newcommand{\nJoints}{n_J}
+\newcommand{\nLinks}{n_{L}}
+\newcommand{\nDofs}{n}
+
+\newcommand{\baseDepVel}[2]{{#2}^{#1}}
+\newcommand{\baseDepTrq}[2]{{#2}_{#1}}
+\newcommand{\massMatrix}[1]{ \baseDepTrq{#1}{{M}} }
+\newcommand{\coriolisMatrix}[1]{ \baseDepTrq{#1}{{C}} }
+\newcommand{\robotVel}[1]{ {\nu}^{#1}}
+\newcommand{\robotAcc}[1]{ \baseDepVel{#1}{{\dot{\nu}} } }
+\newcommand{\gravityTrq}[1]{ \baseDepTrq{#1}{{G}} }
+\newcommand{\linkVel}[1]{{\rmv}_{#1}}
+\newcommand{\linkAcc}[1]{{\dot{\rmv}}_{#1}}
+\newcommand{\jointPos}{s}
+\newcommand{\jointTrq}{\tau}
+\newcommand{\jointVel}{{\dot{s}}}
+\newcommand{\jointAcc}{{\ddot{s}}}
+\newcommand{\jacobian}[2]{\baseDep{#1}{{J}}_{#2}}
+\newcommand{\baseJacobian}[2]{\jacobian{#1}{#2}^B}
+\newcommand{\jointJacobian}[2]{\jacobian{#1}{#2}^L}
+\newcommand{\newBaseFrame}{D}
+
+\newcommand{\bodyVel}{V}
+\newcommand{\bodyLinkVel}[1]{\bodyVel_{#1}}
+\newcommand{\base}{b}
+\newcommand{\basePos}{\homTrans{\inertialFrame}{\bodyFrame}}
+\newcommand{\invBasePos}{\homTrans{\bodyFrame}{\inertialFrame}}
+\newcommand{\linkSet}{\mathfrak{L}}
+\newcommand{\jointSet}{\mathfrak{J}}
+\newcommand{\baseVel}{\bodyVel_{\bodyFrame}}
+\newcommand{\baseAcc}{\dot{\baseVel}}
+\newcommand{\extWrench}[1]{f_{#1}^{ext}}
+\newcommand{\robotPos}{q}
+\newcommand{\inertialFrame}{A}
+\newcommand{\bodyFrame}{B}
+\newcommand{\bodySpatialInertia}{\Lambda}
+\newcommand{\bodyPos}{H}
+\newcommand{\ffVel}{\nu} 
+\newcommand{\ffTrq}{\phi}
+% Todo find 
+\newcommand{\netFT}{\phi}
+
+\newcommand{\homTrans}[2]{{}^{#1}H_{#2}}
+
+\newcommand{\offset}{b}
+
+% ********************************** Theorems ************************************
+
+% Assumption is thing that is accepted as true or as certain to happen, without proof.
+\newtheorem{assumption}{Assumption}
+\numberwithin{assumption}{chapter}
+
+% Remark is a written and isolated comment to a part of the text 
+\newtheorem{remark}{Remark}
+\numberwithin{remark}{chapter}
+
+% Definition is a statement that introduce a new concept/quantity
+\newtheorem{definition}{Definition}
+\numberwithin{definition}{chapter}
+
+
+% Then we have a hierarchy of statement that need a demonstration:
+% Theorem <-- Proposition <-- Lemma <-- Corollary 
+% A Corollary is always attached to a Theorem, and the 
+% demonstration of a Corollary can be omitted because it
+% it supposed to be a straightforward  consequence of a result of 
+% a theorem 
+\newtheorem{theorem}{Theorem}
+\numberwithin{theorem}{chapter}
+
+\newtheorem{proposition}{Proposition}
+\numberwithin{proposition}{chapter}
+
+\newtheorem{lemma}{Lemma}
+\numberwithin{lemma}{chapter}
+
+\newtheorem{corollary}{Corollary}
+\numberwithin{corollary}{chapter}
+
+% Property is a "natural" consequence of some assumption or definition 
+\newtheorem{property}{Property}
+\numberwithin{property}{chapter}
+
+% **************** FT Calibration stuff
+\newcommand{\nrofsg}{6}
+\newcommand{\calibmat}{{C}}
+\newcommand{\shapemat}{{S}}
+\newcommand{\rawval}{{r}}
+\newcommand{\senswrench}{{}^s{w}}
+\newcommand{\sensgrav}{{}^s{g}}
+\newcommand{\offsetwrench}{{}^{o_w}}
+\newcommand{\offsetraw}{{o_r}}
+
+% **************** Change base stuff
+\newcommand{\velBaseTrans}[2]{\ls^{#1}T_{#2}}
+\newcommand{\baseTransform}[2]{\velBaseTrans{#1}{#2}}
+\newcommand{\forceBaseTrans}[2]{\ls_{#1}T^{#2}}
+\newcommand{\baseTransformRec}[2]{\forceBaseTrans{#1}{#2}}
+
+% **************** Weird accent stuff
+\newcommand{\Poincare}{Poincar\'e\ }
+
+% *****************************************************************************
+% *************************** Bibliography  and References ********************
+
+% ******************************************************************************
+% ************************* User Defined Commands ******************************
+% ******************************************************************************
+
+% *********** To change the name of Table of Contents / LOF and LOT ************
+
+%\renewcommand{\contentsname}{My Table of Contents}
+%\renewcommand{\listfigurename}{My List of Figures}
+%\renewcommand{\listtablename}{My List of Tables}
+
+
+% ********************** TOC depth and numbering depth *************************
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+
+% Dedicatory 
+% \newcommand\bhrule{\typeout{------------------------------------------------------------------------------}}
+
+% \newcommand\btypeout[1]{\bhrule\typeout{\space #1}\bhrule}
+
+
+\newcommand\dedicatory[1]{
+% \btypeout{Dedicatory}
+\thispagestyle{plain}
+% \null\vfil
+ %\p@
+\begin{center}{\Large \sl #1}\end{center}
+\vskip 2em
+% \vfil\null
+% \cleardoublepage
+}

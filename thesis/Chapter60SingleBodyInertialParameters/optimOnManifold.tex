@@ -1,0 +1,95 @@
+\subsection{Optimization on manifolds}
+
+In a nutshell, an n-dimensional manifold $\mathcal{M}$ is a space that locally looks like $\mathbb{R}^n$, \emph{i.e.}, for any point $x$ of $\mathcal{M}$ there exists a smooth map $\varphi_x$ between an open set of $\mathbb{R}^n$ and a neighborhood of $x$, with $\varphi_x(0) = x$.
+
+For this paper, we focus on $SO(3)$, a 3-dimensional manifold. As such, it can be parametrized \emph{locally} by $3$ variables, for example, a choice of Euler angles, but any such parametrization necessarily exhibits singularities when taken as a global map (e.g. gimbal lock for Euler angles), which can be detrimental to our optimization process.
+
+For this reason, when addressing $SO(3)$ with classical optimization algorithms, it is often preferred to use one of the two following parametrizations:
+\begin{itemize}
+    \item unit quaternion, \emph{i.e.} an element $q$ of $\mathbb{R}^4$ with the additional constraint $\left\|q\right\| = 1$,
+    \item rotation matrix, \emph{i.e.} an element $R$ of $\mathbb{R}^{3 \times 3}$ with the additional constraints $R^T R = I$ and $\det{R} \geq 0$. 
+\end{itemize}
+
+The alternative is to use optimization software working natively with manifolds~\cite{brossette2015humanoid}\cite{absil:book:2008} and solve
+\begin{align}
+\label{eq:finalProblem}
+    \argmin_{\theta \in \mathbb{R}\times\mathbb{R}^3\times SO(3) \times \mathbb{R}^3} &\ \sum_{i = 1}^N \left\| Y(\rma^g_i, \rmv_i) \pi(\theta) - \rmf_i \right\|^2 \\
+    \mbox{subj. to} &\ m \geq 0,\ L_x \geq 0,\ L_y \geq 0,\ L_z \geq 0
+\end{align}
+
+This alternative has an immediate advantage: we can write directly the problem \eqref{eq:optimizationProblemNonLinear} without the need to add any parametrization-related constraints. Because there are fewer variables and fewer constraints, it is also faster to solve. To check this, we compared the resolution of~\eqref{eq:optimizationProblemNonLinear} formulated with each of the three parametrizations (native $SO(3)$, unit quaternion, rotation matrix). We solved the three formulations with the solver presented in~\cite{brossette2015humanoid}, and the two last with an off-the-shelf solver (CFSQP~\cite{cfsqp:manual}), using the dataset presented in section~\ref{sec:experiments}. 
+The formulation with native $SO(3)$ was consistently solved faster. We observed timings around $0.5$s for it, and over $1$s for non-manifold formulations with CFSQP. The mean time for an iteration was also the lowest with the native formulation (at least $30\%$ when compared to all other possibilities).
+
+%Just like all $\mathbb{R}^{10}$ parametrization do not represent {\it fully physically consistent} inertial parameters, all quaternions or 3D matrices do not represent a valid element of $SO(3)$.
+%Representing an element of $SO(3)$ which is a manifold of dimension 3, with an element $q$ of the dimension-4 quaternion space requires to enforce that the quaternion is unitary.
+%Representing it with a 3D matrix $M$ requires to enforce that $M$ is symmetric, positive definite and of determinant one.
+%Those parametrizations are widely used with classical optimization algorithm, but they require to implement the additional constraints stated above to ensure that the final result represents an element of $SO(3)$.
+
+%Let's consider an optimization problem in which we search a symmetric positive definite matrix $M$ in the form $M = Q^TDQ$ with $Q\in SO(3)$ and $D$ is a real valued diagonal 3D matrix.
+%The search space is $\mathcal{M} = \mathbb{R}^3\times SO(3)$.
+%For $p\in\mathbb{R}^3$ we denote $D(p)$ the diagonal matrix with the elements of $p$ as diagonal values.
+%For $p\in\mathbb{R}^3,\ p=[p_1,\ p_2,\ p_3]$ we denote $D(p) = \begin{pmatrix}
+  %p_1 & 0 & 0 \\
+  %0 & p_2 & 0 \\
+  %0 & 0 & p_3
+%\end{pmatrix}$.
+
+%We want to minimize the difference between the sum of all eigenvalues of M denoted $\operatorname{eig}(M)$ and 42 while respecting a set of constraints $c$ with lower and upper bounds respectively $l$ and $u$.
+%We denote $f(x) = (\operatorname{eig}(Q^TDQ) - 42)^2$.
+%This problem writes as:
+
+%\begin{align}
+%\label{eq:pb}
+%  \min_{x\in\mathcal{M}}\ & f(x) \\
+%  \text{s.t.}\ & l \leq c(x) \leq u \nonumber
+%\end{align}
+
+%In that form, a classical optimization solver cannot solve this problem because it needs a parametrization of $\mathcal{M}$ over an Euclidean space.
+
+%We parametrize the $SO(3)$ part of $x$ with a unit quaternion $q\in\{\mathbb{R}^4:\ \|q\|=1\}$, and denote $Q(q)$ the matrix associated with $q$, which is a rotation matrix iff $||q|| = 1$.
+%With $x = \{q,p\}$.
+%We can rewrite problem \eqref{eq:pb} so that it can be fed to any of-the-shelf optimization program as:
+
+%\begin{align}
+%\label{eq:pbQuat}
+%  \min_{q\in\mathbb{R}^4,\ p\in\mathbb{R}^3} & (\operatorname{eig}(Q(q)^TD(p)Q(q)) - 42)^2 \\
+%  \text{s.t.} & \|q\| = 1 \nonumber\\
+%              & l \leq c(x) \leq u\nonumber 
+%\end{align}
+
+Working directly with manifolds has also an advantage that we do not leverage here, but could be useful for future work: at each iteration, the variables of the problem represent a fully physical consistent set of inertial parameters.
+This is not the case with the other formulations we discussed, as the (additional) constraints are guaranteed to be satisfied only at the end of the optimization process. 
+Having physically meaningful intermediate values can be useful to evaluate additional functions that presuppose it (additional constraints, external monitoring $\ldots$). 
+It can also be leveraged for real-time applications where only a short time is allocated repeatedly to the inertial identification, so that when the optimization process is stopped after a few iterations, the output is physically valid.
+With non-manifold formulations, at any given iteration, the parametrization-related constraints can be violated, thus, the variables might not lie in the manifold. It is then needed to project them on it. Denoting $\pi$ the projection (for example $\pi = \frac{q}{\left\|q\right\|}$ in the unit quaternion formulation), to evaluate a function $f$ on a manifold, we need to compute $f \circ \pi$. If further the gradient is needed, that projection must also be accounted for (\cite{bouyarmane2012humanoids} explains this issue in great details for free-floating robots).
+
+
+%A potential issue with that approach is that the constraint $\|q\| = 1$ is guaranteed to be satisfied only at the solution. 
+%At iteration $k$, from iterate $x_k$ an increment $p_k\in\mathbb{R}^7$ is computed and the next iterate is $x_{k+1} = x_k+p_k$.
+%It is possible that $x_{k+1}$ violates some constraints, including the norm constraint, in which case, $q_{k+1}$ does not represent a rotation.
+%In that case, there is no guarantee that $Q(q)^TD(p)Q(q)$ is diagonalisable in $\mathbb{R}$.
+%Thus, the cost function is not correctly defined and the case of complex eigenvalues needs to be handled.
+%Whereas if $\|q\| = 1$ the eigenvalues of $M(q,p)$ are $p_1$, $p_2$ and $p_3$.
+%A usual method to deal with that issue is to normalize the quaternion in every function that uses it at each iteration, denoting $\pi(q) = \frac{q}{\|q\|}$, $f(x)$ and $c(x)$ become $f\circ\pi(x)$ and $c\circ\pi(x)$.
+%And the gradients computations must take that projection into account, \cite{bouyarmane2012humanoids} explains that problem in great details for robotics problems with free-floating bases.
+%If we use a $Q\in\mathbb{R}^{3\times3}$ parametrization of $SO(3)$, the additional constraints are $\{R^TR = I,\ \det(R)=1\}$ and the projection is the orthogonalization of $R$.
+
+%So all in all this parametrization of the search manifold requires the optimization problem to have more variables (4 for quaternion or 9 for matrix), to add extra constraints to the problem and to modify the actual problem's functions to account for the projection on the search manifold.
+
+%The inertial parameter identification suffers from similar problems with the inertia matrix needing to be symmetric and positive definite and in the formulation presented above, having non-negativity constraints on its eigenvalues to ensure to have a {\it fully physical consistent} inertia matrix.
+
+%We propose to use optimization on manifolds to improve the formulation of our problem and avoid the aforementioned issues.
+
+In this study, we use the same solver and approach as presented in \cite{brossette2015humanoid} which was inspired from \cite{absil:book:2008}.
+%Considering the search space being a n-dimensional manifold $\mathcal{M}$. For any $x\in\mathcal{M}$ there exists of a smooth map $\varphi_x$ between the tangent space of $\mathcal{M}$ at $x$, $T_x\mathcal{M}$, and a neighborhood of $x$, with $\varphi_x(0) = x$. 
+%$T_x\mathcal{M}$ can be identified to $\mathbb{R}^n$.
+The driving idea of the optimization on manifold is to change the parametrization at each iteration. The problem at iteration k becomes:
+\begin{IEEEeqnarray}{rClrCl}
+  \min_{z_k \in \mathbb{R}^n}\ & f\circ\varphi_{x_k}(z) \quad
+  \text{s.t.} \quad & c\circ\varphi_{x_k}(z) = 0 .
+\end{IEEEeqnarray}
+Then $x_{k+1} = \varphi_{x_k}(z_k)$ is guaranteed to belong to $\mathcal{M}$. The next iteration uses the same formulation around $x_{k+1}$.
+
+%With that approach, we do not have any parametrization issues, do not need any additional constraints, do not need to project our iterates and have the minimum number of optimization parameters.
+
+The smooth maps $\varphi_x$ are built-in and are used automatically by the solver while the user only has to implement the functions of the optimization problem without the burden of worrying about the parametrization.

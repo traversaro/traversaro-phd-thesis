@@ -1,0 +1,84 @@
+\begin{comment}
+\section{Lie Group of the Rigid Body Configuration} 
+The configuration of a rigid body is given by its pose $\ls^A H_B \in \SE(3)$ w.r.t. to inertial frame $A$. 
+Consequently the the Lie Algebra of $\SE(3)$ is $\se(3)$. In particular we introduce its left and right trivialization in \ref{}, as:
+\begin{IEEEeqnarray}{rClrCl}
+    \ls^A \rmv_{A,B}^\wedge &=& \ls^A \dot{H}_B \ls^A {H}_B^{-1}
+    \quad 
+    \ls^B \rmv_{A,B}^\wedge &=& \ls^A \dot{H}_B \ls^A \dot{H}_B
+\end{IEEEeqnarray}
+
+To write the Euler-Poincare{`} equation for a multibody system, we need to choose a Lie Group structure even for the configuration space of Multibody System. As we assumed that the shape vector $s \in \R^{\nJoints}$ has the topology of a vector in $\R^{\nJoints}$ the simplest group operation we can think of is:
+\begin{equation}
+    (H_1,s_1) \cdot_{\text{MB}} (H_2,s_2) = (H_1 H_2, s_1 + s_2).   
+\end{equation}
+The matrix representation of such an operation is given as:
+\begin{equation}
+   q_1  \cdot_{\text{MB}} q_2 = 
+   \begin{bmatrix}
+   H_1 & 0_{4 \times \nDofs} & 0_{4 \times 1} \\
+   0_{\nDofs \times 4} & 1_{\nDofs} & s \\
+   0_{1 \times 4} & 0_{1 \times \nDofs} & 1 
+   \end{bmatrix}
+      \begin{bmatrix}
+   H_1 & 0_{4 \times \nDofs} & 0_{4 \times 1} \\
+   0_{\nDofs \times 4} & 1_{\nDofs} & s \\
+   0_{1 \times 4} & 0_{1 \times \nDofs} & 1 
+   \end{bmatrix}
+   = 
+  \begin{bmatrix}
+   H_1 H_2 & 0_{4 \times \nDofs} & 0_{4 \times 1} \\
+   0_{\nDofs \times 4} & 1_{\nDofs} & s_1 + s_2 \\
+   0_{1 \times 4} & 0_{1 \times \nDofs} & 1 
+   \end{bmatrix} .
+\end{equation}
+
+Its Lie Algebra is consequently $\se(3) + \R^\nDofs$. Assuming to identify an element of $\se(3) + \R^n$ as an element of $\nu \in \R^{n+6}$, with $\nu = [\rmv ; s]$, the adjoint representation are: 
+\begin{IEEEeqnarray}{rCl}
+\Ad_q &=& 
+\begin{bmatrix}
+ \Ad_H & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix} 
+= 
+\begin{bmatrix}
+ X & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix} ,
+\\
+\ad_{\nu} &=& 
+\begin{bmatrix}
+ \ad_{\rmv} & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+ \rmv {\times} & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix} ,
+\\
+\ad^*_{\nu} &=& 
+\begin{bmatrix}
+ \ad^*_{\rmv} & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix} 
+= 
+\begin{bmatrix}
+ - \rmv \bar{\times}^* & 0_{6 \times \nDofs} \\
+  0_{\nDofs \times 6} & 0_{\nDofs \times \nDofs} 
+\end{bmatrix} .
+\end{IEEEeqnarray}
+
+\section{Euler-Poincare Equations for a Multibody system}
+Regarding the first two terms of the Euler-Poincar\`{e} equation for a multibody system, we have: 
+\begin{IEEEeqnarray}{rCl}
+\frac{\partial}{\partial \nu} l(q,\nu) &=& \frac{\partial}{\partial \nu} k(q,\nu) = 
+\frac{\partial}{\partial \nu} \frac{1}{2} \nu^T M(s) \nu = M(s) \nu \\
+\end{IEEEeqnarray}
+\begin{IEEEeqnarray}{rCl}
+\frac{d}{dt} \frac{\partial}{\partial \nu} l(q,\nu) &=& \frac{d}{dt} M(s) \nu
+\end{IEEEeqnarray}
+
+
+A major difference between the left-trivialized lagrangian of a multibody is that the kinematic energy depends also on the configuration (in particular the internal shape $s$) of the multibody system. 
+\end{comment}

@@ -1,0 +1,129 @@
+\section{BACKGROUND}
+\label{sec:background}
+
+\subsection{Notation}
+The following notation is used throughout the paper.
+\begin{itemize}
+ \item The set of real numbers is denoted by $\mathbb{R}$. Let $u$ and $v$ be two $n$-dimensional column vectors of real numbers, i.e. $u,v \in \mathbb{R}^n$, 
+ their inner product is denoted as $u^\top v$, with ``$\top$'' the transpose operator.
+\item Given $u \in \mathbb{R}^3$, $u \times$ denotes the skew-symmetric matrix-valued operator associated with the cross product in 
+  $\mathbb{R}^3$.
+%  \item Given a time function $f(t) \in \mathbb{R}^n$, its first and second order time derivative are denoted by $\dot{f}(t)$ and $\ddot{f}(t)$,
+%  respectively. Given a function $f(\cdot)$ of several variables, its gradient
+% w.r.t. some of them, say $x$, is the row vector denoted as $ \partial_x f$.
+ \item The Euclidean norm of either a vector or a matrix of real numbers is denoted by $|\cdot |$.
+%  \item $b_i \in \mathbb{R}^n$ denotes the column vector of $n$ zeros but the $\imath$th coordinate, which is equal to one. 
+\item $I_n \in \mathbb{R}^{n \times n}$ denotes the identity matrix of dimension~$n$; 
+$0_n \in \mathbb{R}^n$ denotes the zero column vector of dimension~$n$; $0_{n \times m} \in \mathbb{R}^{n \times m}$ denotes the zero matrix of dimension~$n \times m$.
+\item The vectors $e_1,e_2,e_3$ denote the canonical basis of $\mathbb{R}^3$.
+\item Let $\mathcal{I} = \{O;e_1,e_2,e_3\}$ denote a 
+fixed inertial frame with respect to (w.r.t.) which the sensor's absolute orientation is measured. 
+Let $\mathcal{S} = \{O';i,j,k\}$ denote a frame attached to the sensor, where the matrix $T := (i,j,k)$ is a rotation matrix
+whose column vectors are the vectors
+of coordinates of $i,j,k$ expressed in the basis of  $\mathcal{I}$. 
+\item The sensor's orientation w.r.t. $\mathcal{I}$ is characterized by the rotation matrix $T$. Given a vector of coordinates $\bar{x} \in \mathbb{R}^3$
+expressed w.r.t. $\mathcal{I}$, we denote with $x$ the same vector expressed w.r.t. $\mathcal{S}$, i.e. $\bar{x} = Tx$.
+\item Given $A \in \mathbb{R}^{n \times m}$ and $B \in \mathbb{R}^{p \times q}$, we denote with $\otimes$ the Kronecker product $A \otimes B \in \mathbb{R}^{np \times mq}$.
+\item Given $X \in \mathbb{R}^{m \times p}$, $\text{vec}(X) \in \mathbb{R}^{nm}$ denotes the column vector obtained by stacking the columns of the matrix~$X$. 
+In view of the definition of $\text{vec}(\cdot)$, it follows that \begin{equation}\label{eq:kroneckerVec} \text{vec}(AXB) = \left( B^{\top} \otimes A \right) \text{vec}(X).\end{equation}
+
+% \item For the sake of conciseness, a vector 
+% \[{\bf{x}} = \bar{x}_1 {\bf{i_0}} + \bar{x}_2 {\bf{j_0}} + \bar{x}_3 {\bf{k_0}} = x_1 {\bf{i}} + x_2 {\bf{j}} +x_3 {\bf{k}}\] 
+% is written as 
+% \[{\bf{x}} = ({\bf{i_0}},{\bf{j_0}},{\bf{k_0}})\bar{x} = ({\bf{i}},{\bf{j}},{\bf{k}})x\] 
+% where the two vectors of coordinates $\bar{x}, x \in \mathbb{R}^3$ represent the vector $\bf{x}$ when expressed either w.r.t. the inertial
+% frame $\mathcal{I}$ or w.r.t. the sensor frame $\mathcal{S}$, respectively. As a consequence, 
+% \[ \bar{x} = R x. \]
+\end{itemize}
+
+\subsection{Problem statement and assumptions}
+We assume that the model for predicting the force-torque (also called wrench)  
+% applied to the sensor 
+from the raw measurements is an affine model, i.e. 
+% \begin{equation}
+% \rawval = \shapemat \hspace{0.2em} \senswrench -  {o_r}
+% \end{equation} 
+% Consequently, the output of the sensor can be computed as $\nrofsg$ 
+%(with $m \geq 6$) 
+% raw strain gauges values is :
+\begin{equation}
+\label{wrenchInSensorCoordinates}
+w =  C ( r - o),
+% =  {C} \left( \rawval -  {o_r} \right)
+\end{equation} 
+where
+% \begin{itemize}
+% \item 
+$ {w} \in \mathbb{R}^{6}$ is the wrench exerted on the sensor expressed in the sensor's frame,
+% \item 
+$r \in \mathbb{R}^{\nrofsg}$ is the raw output of the sensor,
+% \item 
+$ {C} \in \mathbb{R}^{6 \times \nrofsg}$ is the
+%full row rank 
+invertible
+calibration matrix, and
+% \item 
+${o} \in \mathbb{R}^6$ is the sensor's offset.
+The calibration matrix and the offset are assumed to be constant.
+% \end{itemize}
+
+We assume that the sensor is attached to a rigid body
+% mechanical structure --~such as a robot manipulator, 
+% see Figure~\ref{photoOfTheIcubLegOrArmWhereYouSeeTheMachanincalChainAttachedToIt}~-- and that
+% this structure posses $n$ degrees of freedoms. The associated configuration of this structure can be
+% then characterized by an $n$-dimensional column vector $q \in \mathbb{R}^n$. 
+% The mechanical structure has a total 
+of 
+(constant) mass $m~\in~\mathbb{R}^+$ and with a center of mass whose position
+w.r.t. the sensor frame $\mathcal{S}$ is characterized the vector $c \in \mathbb{R}^3$.
+
+% \[{\bf{OC}}(q) = ({\bf{i_0}},{\bf{j_0}},{\bf{k_0}})\bar{c}(q) = ({\bf{i}},{\bf{j}},{\bf{k}})c(q).\]
+% \[\bar{c} = Tc,\]
+% with $\bar{c},c \in \mathbb{R}^3$ the vector of the center of mass expressed w.r.t. the inertial and sensor frame, respectively.
+The gravity force applied to the 
+% structure 
+body
+is  given by 
+\begin{IEEEeqnarray}{RCL}
+ \label{eq:g}
+ m\bar{g} = mTg ,
+\end{IEEEeqnarray}
+with $\bar{g},g \in \mathbb{R}^3$ the gravity acceleration expressed w.r.t. the inertial and sensor frame, respectively. The gravity acceleration $\bar{g}$ is constant, so the vector $g$ does not have a constant direction, 
+but has a constant norm.
+
+Finally, we make the following main assumption.
+
+\hp{}{
+ The raw measurements $r$ are taken for static configurations of the 
+ rigid body
+%  mechanical structure 
+ attached to the sensor, i.e. the angular velocity of the frame $\mathcal{S}$ is always zero.
+ Also, the gravity acceleration $g$ is measured by an accelerometer installed on the rigid body.
+%  $\tfrac{d q}{dt} \equiv 0$. 
+  Furthermore, no external force-torque, but the gravity force, acts on the rigid body. Hence
+}
+\begin{IEEEeqnarray}{RCL}
+\label{eq:staticWrench}
+w &=& 
+M(m,c) g, \IEEEyessubnumber  \\
+M(m,c) &:=& m
+\begin{pmatrix}
+I_3 \\
+c \times 
+\end{pmatrix}. \label{matrixM}  \IEEEyessubnumber 
+% = 
+% \mathbf{M} \hspace{0.2em}{}^s\mathbf{g}
+% =
+% \mathbf{M} \hspace{0.2em}
+% {}^s\rawval_w {}^w \mathbf{g}
+\end{IEEEeqnarray} 
+
+\remark{}{ We implicitly assume that the accelerometer frame is aligned with the force-torque sensor frame. 
+This is a convenient, but non necessary, assumption. 
+In fact, if the relative rotation between the sensor frame $\mathcal{S}$ and the accelerometer frame is unknown, 
+it suffices to consider the accelerometer frame as the sensor frame $\mathcal{S}$.
+}
+
+Under the above assumptions, what follows proposes a new method for estimating the sensor's offset $o$ 
+and for identifying the sensor's calibration matrix $C$ without the need of removing the sensor from the 
+hosting system.

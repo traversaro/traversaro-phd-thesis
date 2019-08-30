@@ -1,0 +1,691 @@
+% ******************************* Thesis Appendix A ****************************
+\chapter{Mathematical background on Lie group formalism}
+\label{liegroups}
+
+In this appendix we will briefly define the concepts necessary to derive the equations of motions fro from the principle of least action. To ensure that this section is accessible to readers without an extensive background in differential geometry, we will only introduce concepts related to matrices of real elements, rather then more abstract representations. Furthermore we will introduce only the 
+
+The reader interested in Lie Groups is referred to \citep{hall2003} and \citep{stillwell2008} for a basic overview of Matrix Lie Group theory, to \citep{selig2005} and \cite[Appendix]{murray1994} for an Lie Group applications in robotics and to \citep{marsden1999introduction} for an advanced approach to Lie Group and their connection to mechanical systems.  
+\section{Matrix Lie Groups}
+\begin{definition}[Group]
+A set $G$ associated with a binary operation $\cdot : G \times G \mapsto G $ is called a \emph{group} $(G,\cdot)$ if the following properties are respected:
+\begin{itemize}
+    \item \emph{Closure}: For every $g_1, g_2 \in G$ their operation $g_1 \cdot g_2$ belongs to $G$, i.e. $G$ is the domain of the group operation.\footnote{This condition is implied in the definition of the binary operation, but it is typically included in the group definition in literature.}  
+    \item \emph{Associativity}: For every $g_1, g_2, g_3 \in G$, $(g_1 \cdot g_2) \cdot g_3 = g_1 \cdot ( g_2 \cdot g_3) $ .
+    \item \emph{Existence of the identity}: There exist an element of the group, called identity $I \in G$, such that for every $g \in G$ we have  $I \cdot g = g \cdot I = g$.
+    \item \emph{Existence of the inverse}: For each element $g \in G$ there exist another element, called inverse of $g$ : $g^{-1} \in G$ such that $g \cdot g^{-1} = g^{-1} \cdot g = I$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Matrix Group]
+A group $(G,\cdot)$ in which:
+\begin{itemize}
+ \item the set is a subset of $\R^{n \times n}$,
+ \item the group operation is the matrix multiplication,
+ \item the inverse is the matrix inversion,
+\end{itemize}
+is called \emph{Matrix Group}.
+\end{definition}
+
+\todo[inline]{I am not fully satisfied by this definition. 
+I would imagine there was a definition of matrix lie groups with a clear connection to the smoothness of the group operation of the Lie Group definition, but instead \citep{hall2003} is using converge of sequences}
+\begin{definition}[Matrix Lie Group, \citep{hall2003} Definition 1.4]
+Given a Matrix Group G, and if the following property holds for G:
+\begin{itemize}
+    \item if $A_m$ is any sequence of matrices in G, and $A_m$ converges to some matrix $A$, then either $A$ is in $G$ or $A$ is not invertible,
+\end{itemize}
+then G is \emph{Matrix Lie Group}.
+\end{definition}
+
+\begin{remark}
+A group in which the group elements are matrices, but in which the group operation is not the matrix multiplication \emph{is not} a matrix group. Similarly, a Lie group in which the group elements are matrices but in which the group operation is not the matrix multiplication is not a matrix Lie group. 
+\end{remark}
+
+\begin{definition}[Matrix Exponential]
+Given a Matrix $X \in \R^{n \times n}$, the \emph{exponential} pf the matrix $X$, indicated with $\exp{(X)}$, is defined as:
+\begin{equation}
+\exp{(X)} = \sum_{i = 0}^{\infty} \frac{X^i}{i!} . 
+\end{equation}
+\end{definition}
+
+\begin{definition}[Vector Derivative of Scalar-Valued Function]
+Given a scalar-valued vector function $l(\cdot) : \R^{n} \mapsto \R$, the vector derivative of $l(u)$, indicated with $\frac{\partial l}{\partial u} \in \R^n$, is defined as:
+\begin{equation}
+\left( \frac{\partial l}{\partial u} \right)_{i} = 
+\frac{\partial l}{\partial u_{i}}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Vector Derivative of Vector-Valued Function]
+Given a vector-valued vector function $f(\cdot) : \R^{n} \mapsto \R^{m}$, the vector derivative of $f(u)$, indicated with $\frac{\partial f}{\partial u} \in \mathbb{R}^{n \times m}$, is defined as:
+\begin{equation}
+\left( \frac{\partial f}{\partial u} \right)_{ij} = 
+\frac{\partial f_j}{\partial u_{i}}.
+\end{equation}
+
+If the argument $u$ depends itself a scalar variable $t \in \R$, the total derivative of the composite function $f(u(t))$ can be written as:
+\begin{equation}
+\frac{d}{dt} \left( f \right) = \left( \frac{\partial f}{\partial u} \right)^T \frac{d u}{dt}.
+\end{equation}
+
+\end{definition}
+
+\begin{definition}[Matrix Derivative]
+Given a function scalar-valued matrix function $l(\cdot) : \R^{n \times n} \mapsto \R$, the matrix derivative of $l(X)$, indicated with $\frac{\partial l}{\partial X} \in \R^{n \times n}$, is defined as:
+\begin{equation}
+\left( \frac{\partial l}{\partial X} \right)_{ij} = 
+\frac{\partial l}{\partial X_{ij}}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Tangent Space of a Matrix Lie Group]
+Given a matrix Lie group element $g \in G$, the tangent space $T_g G$ is the space of all matrices $X \in \R^{n \times n}$ such that there exist a smooth function $\gamma(t) : \R \mapsto \R^{n \times n}$ for which:
+\begin{equation}
+   X = \left( \frac{d \gamma(t)}{dt} \right|_{t = T}, \ \gamma(T) = G
+\end{equation}
+\end{definition}
+
+\begin{definition}[Dual of Tangent space]
+Let $T_g G$ be the tangent space of a matrix Lie group $G$ in its point $g$. Its dual space $T_g^* G$ is defined as the space of all the linear functions from $T_g G$ to $\R$:
+\begin{equation}
+T_g^* G = \{ f(\cdot) : \ T_g G \mapsto \R \  | \  \forall X,Y \in T_g G \ f(X+Y) = fX + fY \} .
+\end{equation} 
+\end{definition}
+
+\begin{remark}
+\label{rem:matrixReprOfDualTangent}
+If a $G \subseteq \R^{n \times n}$, then a generic element of $T_g^* G$ can be written as a matrix $f \in \R^{n \times n}$, and its application to an element $X \in T_g G$ can be expressed as
+\begin{equation}
+   \left< f, X \right> = \sum_{ij} f_{ij} X_{ij} .
+\end{equation}
+\end{remark}
+
+
+
+
+\begin{definition}[Lie algebra of a matrix Lie group, \citep{hall2003} Definition 3.18]
+Let G be a Matrix Lie Group. The Lie Algebra $\mathfrak{g}$ of G is the set of all matrices $X \in \R^{n \times n}$ such that $\exp{(Xt)}$ is in G for all $t \in \R$ , i.e. : 
+\begin{equation}
+   \mathfrak{g} := \{ X \in \R^{n\times n} \ | \exp{(X t)} \in G \ \forall  t \in \R \}.
+\end{equation}
+
+Furthermore, for every $X$ and $Y$ that belong to $\mathfrak{g}$, we have that $XY-YX$ belongs to $\mathfrak{g}$. We then define the \emph{Lie Brackets} $[\cdot,\cdot] : \mathfrak{g} \times \mathfrak{g} \mapsto \mathfrak{g}$ as: 
+\begin{equation}
+ [X,Y] = XY - YX .
+\end{equation}
+\end{definition}
+
+\begin{definition}[Dual space of the Lie algebra]
+Let $\mathfrak{g}$ be a Lie algebra of a Matrix Lie Group. Its dual space $\mathfrak{g}^*$ is defined as the space of all the linear functions from $\mathfrak{g}$ to $\R$:
+\begin{equation}
+\mathfrak{g}^* = \{ f(\cdot) : \ \mathfrak{g} \mapsto \R \  | \  \forall X,Y \in \mathfrak{g} \ f(X+Y) = fX + fY \} .
+\end{equation} 
+\end{definition}
+
+\begin{lemma}[Lie algebra as the Tangent Space of the Identity]
+Let $\mathfrak{g}$ be a Lie algebra of a matrix Lie group $G$. We have that (as a set) the Lie algebra coincides with the Tangent space of $G$ at the identity. 
+\begin{equation}
+   \mathfrak{g} = T_{1_n} G .
+\end{equation}
+Furthermore for the dual space $\mathfrak{g}^*$ we have that:
+\begin{equation}
+   \mathfrak{g}^* = T_{1_n}^* G .
+\end{equation}
+\end{lemma}
+
+\begin{lemma}[Trivialization of Tangent Space]
+\label{lem:trivTangentSpace}
+Let $\delta g \in T_g G$ be an element of the tangent space of the matrix Lie group $G$. Then $g^{-1} \delta g$ belongs to $\mathfrak{g}$ and is called \emph{left-trivialization} of $\delta g$. Furthermore $\delta g g^{-1}$ belongs to $\mathfrak{g}$ and is called \emph{right-trivialization} of $\delta g$.
+\end{lemma}
+
+\begin{lemma}[Trivialization of the dual Tangent Space]
+\label{lem:trivDualTangentSpace}
+Let $f \in T_g^* G$ be an element of the dual tangent space of the matrix Lie group $G$. Then the \emph{left-trivialization} of $f$, indicated with $g^{-1} f \in \mathfrak{g}^*$ is defined as:
+\begin{equation}
+\left< g^{-1} f , \xi \right> =  \left<  f , g \xi \right> 
+\end{equation}
+with $\xi \in \mathfrak{g}$. 
+
+Similarly the \emph{right-trivialization} of $f \in T_g^* G$, indicated with $f g^{-1} \in \mathfrak{g}^*$ is defined as:
+\begin{equation}
+\left< f  g^{-1} , \xi \right> =  \left<  f , \xi g \right> 
+\end{equation}
+with $\xi \in \mathfrak{g}$. 
+\end{lemma}
+
+\begin{remark}
+Note that while $f \in T_g^* G$ can be represented by a $n \times n$ matrix as discussed in Remark~\ref{rem:matrixReprOfDualTangent}, the left trivialization $g^{-1} f$ \textbf{is not}  the matrix multiplication of $g^{-1} \in \R^{n \times n}$ times the matrix representing $f$. 
+\end{remark}
+
+\begin{definition}[Adjoint action of a matrix Lie group on its Lie algebra, \citep{hall2003} Definition 3.32]
+\label{def:adjointActionOfGroupOnAlgebra}
+Let $G$ be a matrix Lie group, with $\mathfrak{g}$ its Lie algebra. Then for each $A \in G$, the Adjoint Map of the group $\Ad_A : \mathfrak{g} \mapsto \mathfrak{g}$ is defined as:
+\begin{equation}
+   \Ad_A X = A X A^{-1}.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Adjoint action of a matrix Lie group on the dual space of its Lie algebra]
+\label{def:adjointActionOfGroupOnDual}
+Let $G$ be a matrix Lie group, with $\mathfrak{g}$ its Lie algebra and $\mathfrak{g}^*$ its dual space. Then for each $A \in G$, the Adjoint action of the group on the dual space $\Ad_A : \mathfrak{g} \mapsto \mathfrak{g}$ is defined as:
+\begin{equation}
+   \left< \Ad_A^* f , X \right> \ = \ \left< f , \Ad_A Y \right> .
+\end{equation}
+\end{definition}
+
+\begin{definition}[Adjoint action of a Lie algebra on itself, \citep{hall2003} Definition 3.7]
+\label{def:adjointActionOfAlgebraOnAlgebra}
+
+Let $\mathfrak{g}$ be a Lie algebra of a matrix Lie group $G$. Then for each $X \in \mathfrak{g}$, the Adjoint Map of the algebra $\ad_X : \mathfrak{g} \mapsto \mathfrak{g}$ is defined as:
+\begin{equation}
+   \ad_X Y = [X,Y] .
+\end{equation}
+\end{definition}
+
+\begin{definition}[Adjoint action of a Lie algebra on its dual space]
+\label{def:adjointActionOfAlgebraOnDual}
+
+Let $\mathfrak{g}$ be a Lie algebra of a matrix Lie group $G$, and let $\mathfrak{g}^*$ be its dual space. Then given $X,Y \in \mathfrak{g}$ and $f \in \mathfrak{g}^*$, the Adjoint action of the algebra on the dual space $\ad_X^* : \mathfrak{g}^* \mapsto \mathfrak{g}^*$ is defined as:
+\begin{equation}
+   \left< \ad_X^* f , Y \right> \ = \ \left< f , \ad_X Y \right> .
+\end{equation}
+
+\end{definition}
+
+
+\subsection{Matrix Lie Group Examples}
+
+\subsubsection{Rotation matrices}
+
+The set $\SO(3)$ is
+the set of $\mathbb{R}^{3 \times 3}$ orthogonal matrices with determinant equal to one, namely
+\begin{align}
+\SO(3) :=  \{\, R \in \mathbb{R}^{3 \times 3} \mid R^T R = I_3 , \hspace{0.3em} \operatorname{det}(R) = 1 \,\}.
+\end{align}
+When endowed with matrix multiplication, $\SO(3)$ becomes a Lie group, the {\em Special Orthogonal} group of dimension three.
+
+The Lie Algebra of $\SO(3)$ is $\so(3)$, i.e. the set of skew-symmetric matrices of dimension 3: 
+\begin{IEEEeqnarray}{rCl}
+\so(3) :=  \{\, S \in \mathbb{R}^{3 \times 3}  \mid S^T = -S \,\}.
+\end{IEEEeqnarray}
+
+In particular any element $S \in \so(3)$ has the following structure:
+\begin{IEEEeqnarray}{rCl}
+S = 
+\begin{bmatrix}
+0 & s_z & - s_y \\
+-s_z & 0 & s_x \\
+s_y & -s_x & 0 
+\end{bmatrix}.
+\end{IEEEeqnarray}
+Consequently, an alternative representation for $S$ is the $s \in \R^3$, defined as:
+\begin{equation}
+s = S^\vee = 
+\begin{bmatrix}
+s_x \\
+s_y \\
+s_z 
+\end{bmatrix}.
+\end{equation}
+We will call $s$ the representation of the element $S \in \so(3)$ as a \emph{vector} in $\R^3$, with $^{\vee}$ the operator to map an element of $\so(3)$ to the corresponding vector in $\R^3$. The representation of $\so(3)$ as $\R^3$ simplifies the representation of the covector in $\so^*(3)$ and all the adjoint actions presented in Definitions~\ref{def:adjointActionOfGroupOnAlgebra}, \ref{def:adjointActionOfGroupOnDual}, \ref{def:adjointActionOfAlgebraOnAlgebra} and \ref{def:adjointActionOfAlgebraOnDual}. In particular, if the element of $\so(3)$ is represented as a vector, then also the element of $\so^*(3)$ can be represented as 3D vector, with the application of the element $\so^*(3)$ to the element $v^\wedge \in \so(3)$ is simply the vector dot product:
+\begin{equation}
+\left< f, v \right> = f^T v .
+\end{equation}
+
+Furthermore, all the adjoint actions on $\so(3)$ and $\so^*(3)$  can be represented as $3 \times 3$ matrices. In particular for $R \in \SO(3)$, $v, u \in \R^3 \approx \so(3)$ and we have:
+\begin{IEEEeqnarray}{rCl}
+\Ad_R &=& R, \\
+\Ad_R^* &=& R^T, \\
+\ad_v &=& v^\wedge, \\
+\ad_v^* &=& \left( v^\wedge \right)^T = - v^\wedge.
+\end{IEEEeqnarray}
+
+\subsubsection{Homogeneous transformation matrices}
+The set $\SE(3)$ is defined as
+\begin{align}
+\SE(3) :=  
+\Big\{ 
+\begin{bmatrix} R & p \\ 0_{1\times3} & 1 \end{bmatrix} \in \mathbb{R}^{4 \times 4} \mid 
+R \in \SO(3), p \in \mathbb{R}^3
+\Big\} .
+\end{align}
+When endowed with matrix multiplication, it becomes
+the \emph{Special Euclidean} group of dimension three, a Lie group that can be used to represent rigid transformations and their composition in the 3D space.
+
+The Lie Algebra of $\SE(3)$ is $\se(3)$, the set of the matrices defined as following:
+\begin{align}
+\se(3) :=  
+\Big\{ 
+\begin{bmatrix} \Omega & v \\ 0_{1\times3} & 0 \end{bmatrix} \in \mathbb{R}^{4 \times 4}  \mid \Omega \in \so(3), v \in \mathbb{R}^3 
+\Big\}.
+\end{align}
+
+As in the case of $\so(3)$, we can also identify $\se(3)$ with $\R^6$ using the following mapping: 
+\begin{equation}
+\rmv =
+\left( 
+\begin{bmatrix} \Omega & v \\ 0_{1\times3} & 0 \end{bmatrix}
+\right)^\vee
+=
+\begin{bmatrix}
+v \\
+\Omega^\vee 
+\end{bmatrix}.
+\end{equation}
+
+Using this $6D$ vector representation, the adjoint action assume the form of $4 \times 4$ real matrices, in particular:
+\begin{IEEEeqnarray}{rCl}
+\Ad_H &=& 
+\begin{bmatrix}
+R & o^\wedge R \\
+0_{3 \times 3} & R 
+\end{bmatrix}
+= X, \\
+\Ad_H^* &=& X^T = 
+\begin{bmatrix}
+R^T &  0_{3 \times 3} \\
+-R^T o^\wedge   R & R^T
+\end{bmatrix}
+, \\
+\ad_\rmv &=& 
+\begin{bmatrix}
+\omega^\vee & v^\vee \\
+0_{3\times3} & \omega^\vee
+\end{bmatrix}
+= \rmv \times, \\
+\ad_\rmv^* &=& \left( \rmv \times \right)^T = 
+\begin{bmatrix}
+-\omega^\vee & 0_{3\times3} \\
+ -v^\vee & -\omega^\vee
+\end{bmatrix}
+\end{IEEEeqnarray}
+where the 6D cross product $v \times$ is defined in \eqref{eq:defBVABcross}.
+
+\subsubsection{Real Vector Spaces endowed with vector sum}
+The vector space or real vectors of dimension $n$ can be seen as a Matrix Lie Group.
+In particular the vector $u \in \R^m$ can be mapped to a specific group of matrices in $\R^{(n+1) \times (n+1)}$:
+\begin{equation}
+\begin{bmatrix}
+1_n & v \\
+0_{1 \times n} & 1 
+\end{bmatrix}
+\end{equation}
+
+It is trivial to verify that a group multiplication in this space is equivalent to a sum in the vector space: 
+\begin{equation}
+    \begin{bmatrix}
+1_n & v \\
+0_{1 \times n} & 1 
+\end{bmatrix} 
+\begin{bmatrix}
+1_n & u \\
+0_{1 \times n} & 1 
+\end{bmatrix}
+= 
+\begin{bmatrix}
+1_n & v+u \\
+0_{1 \times n} & 1 
+\end{bmatrix}
+\end{equation}
+Thanks to such a mapping, we can consider the real vector space $\mathbb{R}^n$ to be \emph{equivalent} to a matrix Lie group.
+
+The Lie Algebra of such a matrix Lie group is the set of matrices of format:
+\begin{equation}
+\begin{bmatrix} 
+0_{n \times n} & u \\
+0_{1 \times n} & 0 
+\end{bmatrix}.
+\end{equation}
+A convenient vector representation of such a matrix is obviously the $u$ vector itself. 
+
+Using this vector representation, the adjoint actions are defined as matrices in $\R^{n\times n}$:
+\begin{IEEEeqnarray}{rCl}
+\Ad_v &=& 1_n, \\
+\Ad_v^* &=& 1_n, \\
+\ad_u &=& 0_{n\times n}, \\
+\ad_u^* &=& 0_{n \times n}.
+\end{IEEEeqnarray}
+
+\section{Multibody Dynamics Notation and its connection to Lie Groups} 
+
+In this section, the connection between the notation introduced in Chapter~\ref{chap:rigid-body} and the concepts of matrix Lie groups reviewed in this appendix. 
+
+\subsection{Frame Pose and 6D Velocity} 
+Given two frames $A$ and $B$, their relative pose can be represented by the homogeneous transform $\ls^A H_B$, that is an element of the matrix Lie group $\SE(3)$. Given a trajectory of the rigid body $\ls^A H_B(t) : \R \mapsto \SE(3)$, the time derivative $\ls^A \dot{H}_B(t)$ belongs to the tangent space $T_{\ls^A H_B} \SE(3)$. The \emph{left-trivialized} velocity $\ls^B \rmv_{A,B}^\wedge$ and the \emph{right-trivialized} $\ls^A \rmv_{A,B}^\wedge$ both belong to the Lie algebra of $\SE(3)$, i.e. $\se(3)$. 
+
+\subsection{Cross Product on $\R^6$}
+\label{subsec:crossProductAndLieGroups}
+In the language of Lie groups, the $\R^6$ cross product $\rmv \times$ introduced in
+\eqref{eq:defBVABcross}
+is nothing else that the matrix representation of the adjoint action of
+$\mathbb{R}^6$ on itself, indicated with $\ad$, when thinking at 
+$\mathbb{R}^6$ as the Lie algebra 
+{\em induced} by the Lie algebra homeomorphism
+\eqref{eq:hat6}
+between $\mathbb{R}^6$ and $\se(3)$.
+Defining $g = \ls^AH_B \in \SE(3)$, \eqref{eq:dAXBdt}
+is then usually written as (cf. \cite[Chapter 9, equation (9.3.4)]{marsden1999introduction})
+\begin{align}\label{eq:dotAdg}
+\frac{d}{dt} \Ad_g = \Ad_g \ad_{g^{-1}\dot g},
+\end{align}
+where $\Ad_g = \ls^AX_B$ and
+$\ad_{g^{-1}\dot g} = \ls^A\rmv_{A,B}\times$,
+with
+$g^{-1}\dot g = \ls^B\rmv_{A,B}$.
+This notation is used in the robotic literature in, e.g.,  \citep{garofalo2013closed} and \citep{park1995lie}. This connection
+with Lie group theory allows to 
+obtain immediately useful algebraic 
+equalities such as, e.g., the identity 
+$(\rmv \times \rmw)^\wedge = \rmv^\wedge \rmw^\wedge-\rmw^\wedge \rmv^\wedge =: [\rmv^\wedge, \rmw^\wedge]$, 
+valid for arbitrary
+vectors $\rmv$ and $\rmw \in \R^6$, 
+that derives from the fact that the adjoint operator $\ad$ is nothing else than the matrix commutator $[\cdot,\cdot]$ when using
+the matrix representations ($\rmv^\wedge$ and $\rmw^\wedge$) of the Lie algebra elements.
+
+\subsection{The dual cross product on $\R^6$ ($\bts$)}
+\label{subsec:dualCrossProductAndLieGroups}
+In the language of matrix Lie groups, the dual space of $\se(3)$ (i.e., the space of  linear applications from $\se(3)$ to $\mathbb{R}$) is indicated with $\se(3)^*$ 
+and is the space where 6D forces belong (as opposed to $\se(3)$ where 6D velocity belong).
+In terms of Lie group theory, 
+the 6D force coordinate trasformation $\ls_AX^B$
+is written 
+\begin{equation}
+\ls_AX^B = \Ad^*_{g^{-1}}
+\end{equation}
+with $g = \ls^AH_B \in \SE(3)$. 
+Recall that 
+$Ad_{g} = \ls^AX_B$ and
+$Ad_{g^{-1}} = \ls^BX_A$.
+Then, posing 
+$\xi^\wedge = \ls^B\rmv_{A,B}^\wedge \in \se(3)$, one sees that 
+\begin{align}
+\ls^B\rmv_{A,B} \bar\times^* =
+-\ad^*_\xi .
+\end{align}
+Once again, note how the symbol $\bar\times^*$ appearing in \eqref{eq:defBVABbts} has been explicitly chosen to remind the fact that \eqref{eq:defBVABbts} is obtained from the product ($\times$) given
+in \eqref{eq:defBVABcross}, by
+computing its adjoint ($*$) and
+changing its sign ($-$). Finally,
+\eqref{eq:dBXAstardt} is simply
+\begin{align}
+  \frac{d}{dt} \Ad^*_{g^{-1}} 
+  & =
+  - \Ad^*_{g^{-1}} 
+  \ad^*_\xi
+\end{align}
+for $\dot g = g \xi$, 
+with $g = \ls^AH_B$ and $\xi = \ls^B\rmv_{A,B}^\wedge$. 
+
+\section{Euler-\Poincare Equations and Rigid Body Dynamics}
+The Euler-\Poincare \ Equations are the generalization of the Euler-Lagrange equations to a system whose configuration space is a Lie Group. 
+
+\subsection{Euler-\Poincare Equations}
+\begin{theorem}
+\label{thm:leastActionPrincipleForLieGroups}
+Let $G$ be a Matrix Lie group and let $L : TG \mapsto \mathbb{R}$ be a Lagrangian function.
+Let $l: G \times \mathfrak{g} \mapsto \mathbb{R}$ be the left-trivialization of the Lagrangian $L$, that is
+defined $l(g,\xi) := L(g,g{\xi})$. Then, 
+the variational principle
+\begin{equation}
+\label{eq:variationalSingleBody}
+\delta \int_0^T L(g,\dot{g}) dt = 0
+\end{equation}
+with variations $\delta q$ with fixed end points is 
+equivalent to the Euler-Poincar\`{e} equations
+\begin{equation}
+\label{eq:eulerPoincareDefinition}
+\frac{d}{dt} \frac{\partial l}{\partial \xi} = \ad_{\xi}^* \frac{\partial l}{\partial \xi} + g^{-1} \frac{\partial l}{\partial g}
+\end{equation}
+with reconstruction equation $\dot g = g \xi$
+and where
+$g^{-1} \frac{\partial l}{\partial g}$ is the left-trivialization of $\frac{\partial l}{\partial g}$, as defined in Lemma~\ref{lem:trivDualTangentSpace}. 
+\end{theorem}
+
+\begin{proof}
+To prove the theorem we first transform \eqref{eq:variationalSingleBody} on a variational 
+equation expressed with respect to $l$. We express the variation $\delta \xi$ 
+as a function of variations $\delta g = \left.\frac{dg}{d\epsilon}\right|_{\epsilon = 0}$ and $\delta \dot{g} = \left.\frac{d \dot{g}}{d\epsilon}\right|_{\epsilon = 0}$, obtaining
+\begin{align*}
+  \delta \xi 
+= 
+  \left.
+  \frac{d}{d\epsilon} 
+  \left( g^{-1} \dot{g} \right)
+  \right|_{\epsilon = 0} 
+&= 
+  - \left( g^{-1} \delta g g^{-1} \right) \dot{g} 
+  + g^{-1} \delta \dot{g} \\
+&= 
+  -\eta \xi + g^{-1} \delta \dot{g} 
+\end{align*}
+Computing the time derivative of $\eta = g^{-1} \delta g$, recalling that $\frac{d}{dt} \delta g = \delta \dot{g}$, we get
+\begin{align*}
+\dot{\eta} = \frac{d}{d t} \left( g^{-1} \delta{g} \right) &= - \left( g^{-1} \dot{g} g^{-1} \right) \delta g + g^{-1} \delta \dot{g} \\
+&= - \xi \eta + g^{-1} \delta \dot{g}  .
+\end{align*}
+We therefore obtain, combining the two equations above, that
+\begin{equation}\label{eq:deltaxi}
+\delta \xi = \xi \eta - \eta \xi + \dot{\eta} = \ad_{\xi} \eta + \dot{\eta} .
+\end{equation}
+The variational principle \eqref{eq:variationalSingleBody} is equivalent to 
+\begin{align*}
+\delta \int_0^T l(g,\xi) dt = 0 
+\end{align*}
+with variations of the form \eqref{eq:deltaxi} fixed at the end points. Expliciting, the above reads
+\begin{IEEEeqnarray}{rCl}
+\IEEEyesnumber
+\int_0^T  
+  \left( \frac{\partial l}{\partial g} \cdot \delta g + \frac{\partial l}{\partial \xi} \cdot \delta \xi \right)
+\, dt &=& \IEEEnonumber \\
+\int_0^T 
+  \left< \frac{\partial l}{\partial g} ,  g \eta \right> 
+  + 
+  \left<\frac{\partial l}{\partial \xi} , \ad_\xi \eta + \dot{\eta} \right> dt &=& \IEEEnonumber \\
+\int_0^T 
+  \left< g^{-1} \frac{\partial l}{\partial g} , \eta \right> + 
+  \left< \ad^*_{\xi} \frac{\partial l}{\partial \xi} , \eta \right> 
+  -  
+  \left< \frac{d}{dt} \frac{\partial l}{\partial \xi} , \eta \right> 
+  dt &=& \IEEEnonumber \\
+\int_0^T 
+  \left<  g^{-1} \frac{\partial l}{\delta g} 
+          + \ad^*_\xi \frac{\partial l}{\partial \xi} 
+          - \frac{d}{dt} \frac{\partial l}{\partial \xi} 
+        , \eta 
+  \right> dt &=& 0,
+  \label{eq:lagrangianEulerPoincareNiceForm}
+\end{IEEEeqnarray}
+where we used integration by parts to go from the second to the third step, recalling that $\eta$ is a variation with fixed end points. Given that $\delta g$ (and hence $\eta$) is arbitrary, we finally get
+\begin{align}
+\label{eq:eulerPoinc}
+\frac{d}{dt} 
+  \frac{\partial l}{\partial \xi} 
+  - 
+  \ad^*_{\xi} \frac{\partial l}{\partial \xi} 
+  - 
+  g^{-1} \frac{\partial l}{\partial g} 
+  & = 0 
+\end{align} 
+with $\dot g = g \xi$.
+\end{proof}
+
+\subsection{Rigid Body Dynamics}
+\label{subsec:eulerPoincDemonstations}
+For obtaining the Rigid Body equation of motions we can write the Euler-\Poincare equations with $g = H, \xi = \rmv$, and the left-trivialized lagrangian is given in Proposition~\ref{rigidBodyLeftTrivializedLagrangian}. 
+
+Expliciting the different terms of the Euler-\Poincare equations, we have:
+\begin{IEEEeqnarray}{rCl}
+\IEEEyesnumber 
+-\ad^*_{\rmv} &=& \rmv \overline{\times}^*, \IEEEyessubnumber \\
+\frac{\partial l}{\partial \rmv} &=& \bbM \rmv, \IEEEyessubnumber \\
+\frac{d}{dt} \frac{\partial l}{\partial \rmv} &=& \bbM \dot{\rmv} \IEEEyessubnumber .
+\end{IEEEeqnarray} 
+The first equivalence is consequence from the definition of $\rmv \bar{\times}^*$, while the other two come from the fact that $\bbM$ is constant and hence independent from $\rmv$. 
+
+For the term that depends on the potential energy $-H^{-1} \frac{\partial l}{\partial H} = -H^{-1} \frac{\partial U}{\partial H}$, from the definition of left-trivialization in Lemma~\ref{lem:trivDualTangentSpace} and given $\eta = \begin{bmatrix} \eta_l \\ \eta_a \end{bmatrix} \in \R^6$, $ \eta^\wedge \in \se(3)$ we have:
+\begin{IEEEeqnarray*}{rCl}
+    \left< -H^{-1} \frac{\partial U(H)}{\partial H}, \eta^\wedge \right> &=& \\ 
+    =
+    \left< -\frac{\partial U(H)}{\partial H} , H \eta \right> &=& \\
+    = 
+    -U(H \eta^\wedge ) &=& \\ 
+    = 
+    m \begin{bmatrix} g \\ 0 \end{bmatrix}^T \left( \begin{bmatrix} R \eta_a^\wedge & R \eta_l \\ 0_{3\times1} & 0 \end{bmatrix}  \begin{bmatrix} c \\ 1 \end{bmatrix} \right) &=& \\ 
+    = 
+     m \begin{bmatrix} g \\ 0 \end{bmatrix}^T 
+     \left( 
+     \begin{bmatrix}
+     R & -Rc^\wedge \\
+     0_{1 \times 3} & 0_{1 \times 3} 
+     \end{bmatrix}
+     \right)  
+     \begin{bmatrix} \eta_l \\ \eta_a \end{bmatrix}
+     &=& \\
+     =
+      (R^T g)^T \begin{bmatrix} 
+       m 1_3 &  - m c^\wedge  \end{bmatrix} \eta .
+\end{IEEEeqnarray*}
+From the last equation, we can write $-H^{-1} \frac{\partial l}{\partial H}$ in vector form as:
+
+\begin{equation}
+\label{eq:potentialTermRigidBody}
+-H^{-1} \frac{\partial l}{\partial H} = 
+\begin{bmatrix}
+m 1_3 \\
+m c^\wedge 
+\end{bmatrix}
+R^T g = 
+\bbM 
+\begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix}.
+\end{equation}
+
+Combining equations and \eqref{eq:potentialTermRigidBody}, we obtain equation. 
+
+\section{Hamel Equations and Multi Body Dynamics}
+
+\subsection{Hamel Equations}
+If the configuration space of a mechanical system is a combination of a Lie Group and of a vector space, then the Euler-\Poincare can be specialized in the Hamel equations. 
+
+\begin{theorem}
+\label{thm:hamelEquations}
+Let $Q$ be a Matrix Lie group defined as the direct product of another Matrix Lie Group $G$ and of a real vector space $\R^n$, i.e. $Q = G \times \R^n$. Furthermore let $L : G \times \R^n \times TG \times \R^n \mapsto \mathbb{R}$ be a Lagrangian function.
+Let $l: G \times \R^n \times \mathfrak{g} \times \R^n \mapsto \mathbb{R}$ the left-trivialization (relative just to $G$) of the Lagrangian $L$, defined as $l(g,s,\xi,\dot{s}) := L(g,s,g \xi,\dot{s})$. Then, 
+the variational principle
+\begin{equation}
+\label{eq:variationalMultiBody}
+\delta \int_0^T L(g,s,\dot{g},\dot{s}) dt = 0
+\end{equation}
+with variations $(\delta g, \delta s)$ with fixed end points is 
+equivalent to the Hamel equations
+\begin{IEEEeqnarray}{rCl}
+\IEEEyesnumber
+\label{eq:hamelEquations}
+\frac{d}{dt} \frac{\partial l}{\partial \xi} - \ad_{\xi}^* \frac{\partial l}{\partial \xi} - g^{-1} \frac{\partial l}{\partial g} &=& 0 \IEEEyessubnumber \label{eq:hamelEquationBase}
+ \\
+\frac{d}{dt} \frac{\partial l}{\partial \dot{s}} - \frac{\partial l}{\partial s} &=& 0 \IEEEyessubnumber \label{eq:hamelEquationShape}
+\end{IEEEeqnarray}
+with reconstruction equation $\dot g = g \xi^\wedge$
+and where $g^{-1} \frac{\partial l}{\partial g}$ is the left-trivialization of $\frac{\partial l}{\partial g}$, as defined in Lemma~\ref{lem:trivDualTangentSpace}.
+\end{theorem}
+\begin{proof}
+The variational principle \eqref{eq:variationalMultiBody} is equivalent to 
+\begin{align*}
+\delta \int_0^T l(g,s,\xi,\dot{s}) dt = 0 
+\end{align*}
+with variations of the base part of the form \eqref{eq:deltaxi} fixed at the end points. Expliciting, the above reads:
+\begin{IEEEeqnarray*}{rCl}
+\int_0^T  
+  \left( \frac{\partial l}{\partial g} \cdot \delta g + \frac{\partial l}{\partial \xi} \cdot \delta \xi  + \frac{\partial l}{\partial s} \cdot \delta s + \frac{\partial l}{\partial \dot{s}} \cdot \delta \dot{s} \right)  \ dt .
+\end{IEEEeqnarray*}
+
+It is possible to separate the first two term from the last two terms. Proceeding for the first two terms as in \eqref{eq:lagrangianEulerPoincareNiceForm}, and similarly for the last two terms we can \eqref{eq:variationalMultiBody} as:
+\begin{IEEEeqnarray*}{rCl}
+\int_0^T 
+  \left<  g^{-1} \frac{\partial l}{\delta g} 
+          + \ad^*_\xi \frac{\partial l}{\partial \xi} 
+          - \frac{d}{dt} \frac{\partial l}{\partial \xi} 
+        , \eta 
+  \right>
+  +
+  \left< \frac{\partial l}{\delta s} 
+          - \frac{d}{dt} \frac{\partial l}{\partial \dot{s}} 
+        , \delta s 
+  \right>
+  dt &=& 0.
+\end{IEEEeqnarray*}
+Given that $\eta$ and $\delta s$ are arbitrary, we get that both \eqref{eq:hamelEquationBase} and \eqref{eq:hamelEquationShape} need to be satisfied.
+
+\end{proof}
+
+\subsection{Multi Body Dynamics}
+The Hamel equations \eqref{eq:hamelEquations} can be written for multibody dynamics with $g = H, \xi = \rmv$ and using the lagrangian defined in \eqref{eq:multiboBodyReducedLagrangian}. 
+First, we can combine the first terms of the base and shape equations in a single term:
+
+\begin{IEEEeqnarray*}{rCl}
+\begin{bmatrix}
+\frac{d}{dt} \frac{\partial l}{\partial \rmv} \\
+\frac{d}{dt} \frac{\partial l}{\partial \dot{s}}
+\end{bmatrix}
+&=&
+\frac{d}{dt} \frac{\partial l}{\partial \nu} = \\
+&=& 
+\frac{d}{dt} \frac{\partial \left( M(s) \nu \right) }{\partial \nu} = \\
+&=& 
+M(s) \dot{\nu} + \left( \frac{d}{dt} M(s) \right) \nu.
+\end{IEEEeqnarray*}
+
+The second term and third terms of the base equation of motion, recalling that $-\ad^*_{\rmv} = \rmv \bar{\times}^*$ and the equivalent derivations in Subsection~\ref{subsec:eulerPoincDemonstations} are:
+\begin{IEEEeqnarray}{rCl}
+- \ad_{\rmv}^* \frac{\partial l}{\partial \rmv} &=&
+\rmv \bar{\times}^* \left( \bbM(s) \rmv + F(s) \dot{s} \right), \\ 
+-H^{-1} \frac{\partial l}{\partial H} &=& 
+-\begin{bmatrix}
+m 1_3 \\
+m c^\wedge(s)
+\end{bmatrix}
+R^T g = 
+-\bbM(s)
+\begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix}.
+\end{IEEEeqnarray}
+
+The second term of the shape Hamel equations is given as:
+\begin{equation}
+- \frac{\partial l}{\partial s} =
+- \frac{\partial}{\partial s} \left( \frac{1}{2} \nu^T M(s) \nu \right) - \frac{\partial c}{\partial s} R^T g .
+\end{equation}
+
+Combining the different terms, we obtain:
+\begin{IEEEeqnarray}{rCl}
+M(s) \dot{\nu} &+& \left( \frac{d}{dt} M(s) \right) \nu -
+\begin{bmatrix}
+\rmv \bar{\times}^* \left( \bbM(s) \rmv + F(s) \dot{s} \right) \\
+0_{\nDofs \times 1}
+\end{bmatrix} + \\
+&-&
+\begin{bmatrix}
+0_{6 \times 1} \\
+\frac{\partial}{\partial s} \left( \frac{1}{2} \nu^T M(s) \nu \right)
+\end{bmatrix}
+-
+\begin{bmatrix}
+m 1_3 \\
+m c^\wedge(s) \\
+\frac{\partial c}{\partial s}
+\end{bmatrix} 
+R^T g = 0_{(\nDofs+6)\times1}
+\end{IEEEeqnarray}
+The first term is the only one that depends on the acceleration of the system, while the last one is the only one that depends on the gravitation acceleration. 
+
+From straightforward algebraic manipulations we then have that:
+\begin{IEEEeqnarray}{rCl}
+\begin{bmatrix}
+\left( \frac{d}{dt} M(s) \right) \nu \\
+\frac{\partial}{\partial s} \left( \frac{1}{2} \nu^T M(s) \nu \right)
+\end{bmatrix} &=& \sum_{L} J_L^T \left[ \left( \rmv_L \bar{\times}^* \ls_L \mathbb{M}_L + \ls_L \mathbb{M}_L \rmv_L \times \right) J_L + \ls_L \mathbb{M}_L \dot{J}_L \right],
+\\
+\begin{bmatrix}
+m 1_3 \\
+m c^\wedge(s) \\
+\frac{\partial c}{\partial s}
+\end{bmatrix} 
+R^T g &=& M(s) \begin{bmatrix} R^T g \\ 0_{3 + \nJoints} \end{bmatrix} .
+\end{IEEEeqnarray}
