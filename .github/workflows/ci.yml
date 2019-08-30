@@ -12,7 +12,7 @@ jobs:
     
     - name: Dependencies
       run: |
-        sudo apt-get install texlive-latex-base  texlive-fonts-extra texlive-publishers texlive-science
+        sudo apt-get install texlive-latex-base texlive-font-utils texlive-fonts-extra texlive-publishers texlive-science
         
     - name: Generate PDF   
       run: |
