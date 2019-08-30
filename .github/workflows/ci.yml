@@ -12,7 +12,7 @@ jobs:
     
     - name: Print github context
       env:
-        GITHUB_EVENT: ${{ github.event }}
+        GITHUB_EVENT: ${{ github.event_name }}
         GITHUB_REF: ${{ github.ref }}
       run: |
         echo $GITHUB_EVENT $GITHUB_REF
@@ -35,7 +35,7 @@ jobs:
         cp thesis/thesis.pdf deploy/traversaro-phd-thesis.pdf
         
     - name: Deploy
-      if: github.event == 'push' && github.ref == 'master'
+      if: github.event_name == 'push' && github.ref == 'master'
       uses: JamesIves/github-pages-deploy-action@master
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
