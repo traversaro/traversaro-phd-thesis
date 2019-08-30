@@ -10,7 +10,7 @@ The thesis uses the template available at https://github.com/kks32/phd-thesis-te
 
 ### Dependencies (Debian/Ubuntu)
 ~~~
-sudo apt install pdflatex texlive-fonts-extra
+sudo apt install texlive-latex-base texlive-font-utils texlive-fonts-extra texlive-publishers texlive-science
 ~~~
 
 ### Generate PDF 
