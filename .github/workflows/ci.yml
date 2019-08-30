@@ -22,3 +22,16 @@ jobs:
         pdflatex thesis.tex
         pdflatex thesis.tex
         
+    - name: Prepare for deploy
+      run: | 
+        mkdir deploy
+        cp thesis/thesis.pdf deploy/traversaro-phd-thesis.pdf
+        
+    - name: Deploy
+      if: github.event == 'push' && github.ref == 'master'
+      uses: JamesIves/github-pages-deploy-action@master
+      env:
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: deploy
+        
