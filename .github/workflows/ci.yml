@@ -10,6 +10,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
+    - name: Print GitHub context
+      env:
+        GITHUB_EVENT: ${{ github.event_name }}
+        GITHUB_REF: ${{ github.ref }}
+      run: |
+        echo $GITHUB_EVENT $GITHUB_REF
+    
     - name: Dependencies
       run: |
         sudo apt-get install texlive-latex-base texlive-font-utils texlive-fonts-extra texlive-publishers texlive-science
