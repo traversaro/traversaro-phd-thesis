@@ -1,0 +1,24 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Dependencies
+      run: |
+        sudo apt-get install texlive-latex-base texlive-font-utils texlive-fonts-extra texlive-publishers texlive-science
+        
+    - name: Generate PDF   
+      run: |
+        cd thesis
+        pdflatex thesis.tex
+        bibtex thesis.aux
+        pdflatex thesis.tex
+        pdflatex thesis.tex
+        
