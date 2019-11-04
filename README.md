@@ -31,5 +31,5 @@ pdflatex thesis.tex
 * [Vibhor Aggarwal (`vibhoraggarwal`)](https://github.com/vibhoraggarwal)
 * [Prashanth Ramadoss (`prashanthr05`)](https://github.com/prashanthr05)
 * [Lorenzo Rapetti (`lrapetti`)](https://github.com/lrapetti)
-* [Yeshasvi Tirupachuri `Yeshasvitvs`](https://github.com/Yeshasvitvs)
+* [Yeshasvi Tirupachuri (`Yeshasvitvs`)](https://github.com/Yeshasvitvs)
 
