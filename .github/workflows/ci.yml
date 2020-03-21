@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  push:
+  pull_request:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -41,4 +45,15 @@ jobs:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages
         FOLDER: deploy
+        
+    - name: Upload Release Asset
+      if: github.event_name == 'release'
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: deploy/traversaro-phd-thesis.pdf
+          asset_name: traversaro-phd-thesis.pdf
+          asset_content_type: application/pdf
         
