@@ -1572,7 +1572,7 @@ From this computation we can now write the Newton-Euler equations using the \emp
 Non-conservative forces can be considered in this model by appropriately modifying the Lagrangian \citep{bullo2005}, to obtain the following equation:
 \begin{equation}
 \label{eq:NewtonEulerInLeftTrivializedWithoutNotation}
-\bbM \dot{\rmv} - \rmv \bar{\times}^*\bbM {\rmv}
+\bbM \dot{\rmv} + \rmv \bar{\times}^*\bbM {\rmv}
  =  \bbM \begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix} + \ls_B \rmf^x 
 \end{equation}
 
@@ -1581,8 +1581,8 @@ Where $\rmf^x$ is the external force-torque exerted by the environment on the ri
 The same equation can be expressed in a more compact way using the \emph{proper} acceleration:
 \begin{equation}
 \label{eq:NewtonEulerInLeftTrivializedWithoutNotationAndProperAcceleration}
-\bbM \left( \dot{\rmv}  +  \begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix} \right) + \rmv \bar{\times}^*\bbM {\rmv}
- =  \bbM + \ls_B \rmf^x 
+\bbM \left( \dot{\rmv}  -  \begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix} \right) + \rmv \bar{\times}^*\bbM {\rmv}
+ =  \ls_B \rmf^x 
 \end{equation}
 
 \section{Newton-Euler equations in the different  representations}
@@ -1607,7 +1607,7 @@ While this equation may seem similar to \eqref{eq:NewtonEulerInLeftTrivialized} 
 \subsection{Mixed}
 The dynamics using mixed acceleration can be written as:
 \begin{IEEEeqnarray}{rCl}
-\ls_{B[A]} \bbM_B \ls^A \dot{\rmv}_{{A,B}} + 
+\ls_{B[A]} \bbM_B \ls^{B[A]} \dot{\rmv}_{{A,B}} + 
 \begin{bmatrix} 
 0_{3\times1} \\
 \ls^A \omega_{A,B} 
@@ -1709,8 +1709,8 @@ Note that the Newton-Euler equations can be defined also using the \emph{mixed} 
 Assuming that the origin of a link frame $G$ is coincident with the center of mass of the body, i.e. $ \ls^G c_B = 0$, the time derivative of the total momentum expressed in the mixed frame $G[A]$ is equal to the sum of the potential and contact 6D forces applied on the body, i.e.:
 \begin{equation}
 \ls_{G[A]} \dot{\mathrm{h}}_{A,B} = 
-\ls_{G[A]} X^B \ls_B \bbM_B \begin{bmatrix} R^T g \\ 0_{3 \times 1} \end{bmatrix} + \ls_A \rmf^x  = 
-\begin{bmatrix} m \ls^A R^T_G \ls^A g \\ 0_{3 \times 1} \end{bmatrix} + \ls_{G[A]} \rmf^x .
+\ls_{G[A]} X^B \ls_B \bbM_B \begin{bmatrix} \ls^A R^T_G \ls^A g \\ 0_{3 \times 1} \end{bmatrix} + \ls_{G[A]} \rmf^x  = 
+\begin{bmatrix} m \ls^A g \\ 0_{3 \times 1} \end{bmatrix} + \ls_{G[A]} \rmf^x .
 \end{equation}
 \end{lemma}
 
