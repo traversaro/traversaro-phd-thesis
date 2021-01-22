@@ -1,6 +1,6 @@
 # phd-thesis
 
-The latest version of the thesis, automatically generated from the lastest commit on the `master` branch of the repo, is available at https://traversaro.github.io/phd-thesis/traversaro-phd-thesis.pdf .
+The latest version of the thesis, automatically generated from the lastest commit on the `master` branch of the repo, is available at https://traversaro.github.io/traversaro-phd-thesis/traversaro-phd-thesis.pdf .
 
 For any doubt or to report an error on the thesis, please open an issue in this repo: https://github.com/traversaro/phd-thesis/issues/new .
 
