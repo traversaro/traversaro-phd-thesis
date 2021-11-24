@@ -708,13 +708,13 @@ This acceleration is used for example in \citep{siciliano2010robotics}. Its rela
  $\ls^B \dot{\rmv}_{A,B}$ & 
  $\ls^B \dot{\rmv}_{A,B}$ & 
  $\ls^B X_A \ls^A \dot{\rmv}_{A,B}$ & 
- $\ls^B X_{B[A]} \ls^{B[A]} \dot{\rmv}_{A,B} - 
+ $\ls^B X_{B[A]} \ls^{B[A]} \dot{\rmv}_{A,B} +
  \begin{bsmallmatrix}
 \left( \ls^B R_A \ls^A  \dot{o}_B \right) \times \ls^B \omega_{A,B} \\ 
  0_{3 \times 1} 
  \end{bsmallmatrix} $ & 
  $\alpha 
- - 
+ +
  \begin{bsmallmatrix}
  \left( \ls^B R_A \ls^A \dot{o}_B \right) \times \ls^B \omega_{A,B}  \\ 
  0_{3 \times 1} 
@@ -725,12 +725,12 @@ This acceleration is used for example in \citep{siciliano2010robotics}. Its rela
   $\ls^A \dot{\rmv}_{A,B}$ & 
   $\ls^A X_B \ls^B \dot{\rmv}_{A,B}$ & 
   $\ls^A \dot{\rmv}_{A,B}$ & 
-  $\ls^A X_{B[A]} \ls^{B[A]} \dot{\rmv}_{A,B} - 
+  $\ls^A X_{B[A]} \ls^{B[A]} \dot{\rmv}_{A,B} +
  \begin{bsmallmatrix}
  \ls^A  \dot{o}_B \times \ls^A \omega_{A,B} \\ 
  0_{3 \times 1} 
  \end{bsmallmatrix}$  & 
-  $\ls^A X_{B} \alpha - 
+  $\ls^A X_{B} \alpha +
  \begin{bsmallmatrix}
  \ls^A  \dot{o}_B \times \ls^A \omega_{A,B} \\ 
  0_{3 \times 1} 
@@ -740,14 +740,14 @@ This acceleration is used for example in \citep{siciliano2010robotics}. Its rela
  $\ls^{B[A]} \dot{\rmv}_{A,B}$ & 
  $
  \ls^{B[A]} X_B  \ls^B \dot{\rmv}_{A,B}
- +\begin{bsmallmatrix}
+ -\begin{bsmallmatrix}
  \ls^A  \dot{o}_B \times \ls^A \omega_{A,B} \\ 
  0_{3 \times 1} 
  \end{bsmallmatrix}$
   & 
   $
   \ls^{B[A]} X_A  \ls^A \dot{\rmv}_{A,B}
-  +\begin{bsmallmatrix}
+  -\begin{bsmallmatrix}
  \ls^A  \dot{o}_B \times \ls^A \omega_{A,B} \\ 
  0_{3 \times 1} 
  \end{bsmallmatrix}$ & 
@@ -758,14 +758,14 @@ $\ls^{B[A]} \dot{\rmv}_{A,B}$ &
  $\alpha$ & 
   $
   \ls^B \dot{\rmv}_{A,B}
-  +
+  -
   \begin{bsmallmatrix}
  \left( \ls^B R_A \ls^A \dot{o}_B \right) \times \ls^B \omega_{A,B}  \\ 
  0_{3 \times 1} 
  \end{bsmallmatrix}$ & 
     $
     \ls^B X_A \ls^A \dot{\rmv}_{A,B}
-  +
+  -
   \begin{bsmallmatrix}
  \left( \ls^B R_A \ls^A \dot{o}_B \right) \times \ls^B \omega_{A,B}  \\ 
  0_{3 \times 1} 
