@@ -58,7 +58,7 @@ Note that no ``relative'' equivalent are used for the \emph{sensor} and \emph{pr
 \section{Composition of relative and absolute velocity}
 A key aspect in multibody systems is how to compute the \emph{absolute} position, velocity and acceleration of a frame $D$ given the \emph{absolute} position, velocity and acceleration of a frame $B$ and the \emph{relative} position, velocity and acceleration of the frame $D$ w.r.t. to $B$. 
 
-At the position level, this problem is simply solved by the composition law of homogeneous transformation: given $\ls^A H_B$ and $\ls^B H_D$, $\ls^A H_D$ can simply be obtained my matrix multiplication:
+At the position level, this problem is simply solved by the composition law of homogeneous transformation: given $\ls^A H_B$ and $\ls^B H_D$, $\ls^A H_D$ can simply be obtained by matrix multiplication:
 \begin{equation}
     \ls^A H_D = \ls^A H_B \ls^B H_D .
 \end{equation}
@@ -147,7 +147,7 @@ $$
 \ls^B H_D(\theta) : \R \mapsto \SE(3) .
 $$
 
-The relative velocity and acceleration between of $D$ w.r.t. to $B$  is related to the time derivatives of joint configuration $\theta$: 
+The relative velocity and acceleration of $D$ w.r.t. to $B$  is related to the time derivatives of joint configuration $\theta$: 
 \begin{IEEEeqnarray}{rCl}
  \frac{d \ \ls^B H_D(\theta)}{dt} &=& \frac{d\ \ls^B H_D(\theta)}{d \theta} \dot{\theta}
 \end{IEEEeqnarray}
