@@ -1592,7 +1592,7 @@ Applying the accelerations and velocity transforms presented in Table~\ref{tab:v
 Using the notation introduced in this thesis in extended form, \eqref{eq:NewtonEulerInLeftTrivializedWithoutNotation} can be written as:
 \begin{IEEEeqnarray}{rCl}
 \label{eq:NewtonEulerInLeftTrivialized}
-\ls_B \bbM_B \ls^B \dot{\rmv}_{A,B} + \ls^B \rmv_{A,B} \bar{\times}^*\ls_B \bbM_B \ls^B {\rmv}
+\ls_B \bbM_B \ls^B \dot{\rmv}_{A,B} + \ls^B \rmv_{A,B} \bar{\times}^*\ls_B \bbM_B \ls^B {\rmv}_{A,B}
  &=&  \ls_B \bbM_B \begin{bmatrix} \ls^A R^T_B \ls^Ag \\ 0_{3 \times 1} \end{bmatrix} + \ls_B \rmf^x 
 \end{IEEEeqnarray}
 
@@ -1602,7 +1602,7 @@ Using the notation introduced in this thesis in extended form, \eqref{eq:NewtonE
 \ls_A \bbM_B \ls^A \dot{\rmv}_{A,B} + \ls^A \rmv_{A,B} \bar{\times}^*\ls_A \bbM_B \ls^A {\rmv}
 &=&  \ls_A \bbM_B \begin{bmatrix} \ls^Ag \\ 0_{3 \times 1} \end{bmatrix} + \ls_A \rmf^x .
 \end{IEEEeqnarray}
-While this equation may seem similar to \eqref{eq:NewtonEulerInLeftTrivialized} the main difference is that $\ls_B \bbM_B$ is a fixed quantity while $\ls_A \bbM_B =  \ls_A X^B \bbM_B \ls^B X_A$ that is a time-varying quantity that depends on the position of the rigid body. 
+While this equation may seem similar to \eqref{eq:NewtonEulerInLeftTrivialized} the main difference is that $\ls_B \bbM_B$ is a fixed quantity while $\ls_A \bbM_B =  \ls_A X^B \ls_B \bbM_B \ls^B X_A$ that is a time-varying quantity that depends on the position of the rigid body. 
 
 \subsection{Mixed}
 The dynamics using mixed acceleration can be written as:
