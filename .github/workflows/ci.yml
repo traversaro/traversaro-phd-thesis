@@ -40,11 +40,11 @@ jobs:
         
     - name: Deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-      uses: JamesIves/github-pages-deploy-action@3.7.1
+      uses: JamesIves/github-pages-deploy-action@v4
       env:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: deploy
+        token: ${{ secrets.ACCESS_TOKEN }}
+        branch: gh-pages
+        folder: deploy
         
     - name: Upload Release Asset
       if: github.event_name == 'release'
