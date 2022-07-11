@@ -41,7 +41,7 @@ jobs:
     - name: Deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: JamesIves/github-pages-deploy-action@v4
-      env:
+      with:
         token: ${{ secrets.ACCESS_TOKEN }}
         branch: gh-pages
         folder: deploy
