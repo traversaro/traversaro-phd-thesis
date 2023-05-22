@@ -32,4 +32,5 @@ pdflatex thesis.tex
 * [Prashanth Ramadoss (`prashanthr05`)](https://github.com/prashanthr05)
 * [Lorenzo Rapetti (`lrapetti`)](https://github.com/lrapetti)
 * [Yeshasvi Tirupachuri (`Yeshasvitvs`)](https://github.com/Yeshasvitvs)
+* [Alessandro Croci (`xela-95`)](https://github.com/xela-95)
 
