@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v1
@@ -37,7 +37,13 @@ jobs:
       run: | 
         mkdir deploy
         cp thesis/thesis.pdf deploy/traversaro-phd-thesis.pdf
-        
+
+    # Upload as an artifact to debug PRs before merging
+    - uses: actions/upload-artifact@v3
+      with:
+        name: traversaro-phd-thesis.pdf
+        path: deploy/traversaro-phd-thesis.pdf
+
     - name: Deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/master'
       uses: JamesIves/github-pages-deploy-action@v4
