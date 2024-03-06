@@ -6,6 +6,24 @@ For any doubt or to report an error on the thesis, please open an issue in this 
 
 The thesis uses the template available at https://github.com/kks32/phd-thesis-template .
 
+## Cite the thesis
+
+You can use the following `bibtex` snippet to cite the thesis:
+
+~~~
+@phdthesis{traversaro2017thesis,
+  author       = {Traversaro, Silvio},
+  title        = {{Modelling, Estimation and Identification of Humanoid Robots Dynamics}},
+  school       = {University of Genoa},
+  year         = 2017,
+  month        = apr,
+  doi          = {10.5281/zenodo.3564797},
+  url          = {https://doi.org/10.5281/zenodo.3564797}
+}
+~~~
+
+As true in general for long book or thesis, if you need to cite a specific point of the thesis, please refer to the specific formula or section, not to the thesis in general.
+
 ## Compile the thesis 
 
 ### Dependencies (Debian/Ubuntu)
