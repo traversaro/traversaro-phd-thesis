@@ -97,7 +97,7 @@ y_{\text{mag}} = \ls^S R_A \ls^A b = \ls^S R_B \ls^B R_A \ls^A b .
 
 An \emph{Inertial Measurement Unit} is a compound sensor in which a gyroscope, an accelerometer and possibly a magnetometer are packed together to estimate the orientation of the sensor frame w.r.t. an arbitrary \emph{earth-fixed} inertial frame $A_{\text{IMU}}$. The output of the IMU estimation is then an orientation, that can be expressed using Euler Angles, Quaternion or some other representation of $\SO(3)$. Assuming that we consider the output of the IMU to be directly a rotation matrix, we have:
 \begin{equation}
-y_{\text{IMU}} = \ls^{A_{\text{IMU}}} R_S = \ls^{A_{\text{IMU}}} R_A \ls^A R_B \ls^A R_S
+y_{\text{IMU}} = \ls^{A_{\text{IMU}}} R_S = \ls^{A_{\text{IMU}}} R_A \ls^A R_B \ls^B R_S
 \end{equation}
 It is important to stress that in general the inertial frame $A_{\text{IMU}}$ used by the IMU may be different from the one used in the rest of the analysis. The constant $\ls^{A_{\text{IMU}}} R_A$ must be properly taken in account when designing algorithms that use the output of one or more IMUs.
 
